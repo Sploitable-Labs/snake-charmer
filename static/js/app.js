@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch('/submit', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `code=${encodeURIComponent(code)}&challenge_id=${challengeId}`
+            body: `code=${encodeURIComponent(code)}&challenge_id=${challengeId}&available_score=${availableScore}`
         })
         .then(response => response.json())
         .then(data => {

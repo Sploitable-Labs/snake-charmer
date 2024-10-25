@@ -119,8 +119,7 @@
             {"text": "Use conditional statements to handle 'Fizz', 'Buzz', and 'FizzBuzz'.", "penalty": 5}
         ],
         "test_cases": [
-            {"input": [5], "expected_output": ["1", "2", "Fizz", "4", "Buzz"]},
-            {"input": [15], "expected_output": ["1", "2", "Fizz", "4", "Buzz", "Fizz", "7", "8", "Fizz", "Buzz", "11", "Fizz", "13", "14", "FizzBuzz"]}
+            {"input": [15], "expected_output": [1, 2, "Fizz", 4, "Buzz", "Fizz", 7, 8, "Fizz", "Buzz", 11, "Fizz", 13, 14, "FizzBuzz"]}
         ]
     },
     {

@@ -53,6 +53,7 @@ def index():
 def submit():
     code = request.form['code']
     challenge_id = int(request.form['challenge_id'])
+    available_score = int(request.form['available_score'])  # Get the adjusted score after hints
 
     # Find the challenge by ID
     challenge = next((c for c in challenges if c['id'] == challenge_id), None)
@@ -64,10 +65,9 @@ def submit():
     
     if success:
         challenge_score = 0  # Initialize variable for points awarded for this challenge
-        # Accumulate the score only if the challenge was not previously completed
         if challenge_id not in user_data['completed_challenges']:
-            challenge_score = challenge['score']  # Points awarded for this challenge
-            user_data['score'] += challenge_score  # Update total score
+            challenge_score = available_score  # Award points based on available score
+            user_data['score'] += challenge_score  # Update the user's total score
             user_data['completed_challenges'].append(challenge_id)  # Mark challenge as completed
             message = f"Challenge completed! You earned {challenge_score} points."
 
@@ -78,7 +78,6 @@ def submit():
         # Return success, the total score, and the points for the current challenge
         return jsonify({"success": success, "message": message, "score": user_data['score'], "challenge_score": challenge_score})
 
-    # If the challenge was not successful
     return jsonify({"success": False, "message": message})
 
 if __name__ == '__main__':
