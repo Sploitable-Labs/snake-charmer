@@ -11,15 +11,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const submitButton = document.getElementById('submit-btn');
 
-    // Set initial styles for completed challenges
-    challengeData.forEach(challenge => {
-        const button = document.querySelector(`.challenge-btn[data-id="${challenge.id}"]`);
-        if (button && challenge.completed) {
-            button.classList.add('completed-challenge');
-            button.innerHTML += ' <i class="fas fa-check-circle tick-mark"></i>';
-        }
-    });
-
     // Attach event listeners to each challenge button
     document.querySelectorAll('.challenge-btn').forEach(button => {
         button.addEventListener('click', function () {

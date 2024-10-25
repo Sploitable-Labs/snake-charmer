@@ -35,7 +35,7 @@
                     </button>
                     <div class="collapse category-items" id="cat-{{ loop.index }}">
                         {% for challenge in category.list %}
-                        <button class="challenge-btn" data-id="{{ challenge.id }}">
+                        <button class="challenge-btn {% if challenge.id in user_data.completed_challenges %}completed-challenge{% endif %}" data-id="{{ challenge.id }}">
                             <span id="challenge-name-{{ challenge.id }}">{{ challenge.name }}</span>
                             {% if challenge.id in user_data.completed_challenges %}
                             <i class="fas fa-check-circle tick-mark"></i>
