@@ -112,6 +112,7 @@ header {
     background-color: #e0e0e0;
     border-radius: 5px;
     text-align: center;
+    
 }
 
 #code-editor {
@@ -191,3 +192,37 @@ header {
     padding: 15px;
     background-color: #f4f4f9;
 }
+
+/* Computer container */
+.computer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px auto;
+    width: 80%; /* Adjust as needed */
+    max-width: 70%;
+}
+
+/* Frame surrounding the editor to look like a screen */
+.computer-frame {
+    background-color: #333; /* Dark gray for the monitor frame */
+    border-radius: 10px;
+    padding: 20px;
+    width: 100%;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
+    position: relative; /* Ensures ::after can be positioned within the frame */
+}
+
+/* Green power light at the bottom right */
+.computer-frame::after {
+    content: "";
+    position: absolute;
+    bottom: 15px; /* Position above the bottom edge */
+    right: 15px; /* Position slightly from the right edge */
+    width: 10px;
+    height: 10px;
+    background-color: #0f0; /* Green color for power light */
+    border-radius: 50%; /* Make it circular */
+    box-shadow: 0 0 8px rgba(0, 255, 0, 0.7); /* Glow effect */
+}
+
