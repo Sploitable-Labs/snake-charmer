@@ -1,0 +1,52 @@
+body {
+    background-color: #f8f9fa;
+}
+
+header {
+    font-size: 1.5rem;
+}
+
+#menu {
+    max-height: 100vh;
+    overflow-y: auto;
+    padding: 0 1rem;
+}
+
+#code-editor {
+    background-color: #1e1e1e;
+    color: #dcdcdc;
+    padding-top: 10px; /* Vertical padding */
+    width: 100%;
+    max-width: 80ch; /* Limit width to 80 characters */
+}
+
+.challenge-btn {
+    color: #007bff;
+}
+
+.active-challenge {
+    background-color: #007bff; /* Highlight color for active challenge */
+    color: #ffffff;
+}
+
+.challenge-btn.active, .challenge-btn:hover {
+    color: #0056b3;
+    font-weight: bold;
+}
+
+.challenge-btn i {
+    margin-left: 5px;
+}
+
+.alert {
+    font-size: 1rem;
+}
+
+#submit-btn, #message {
+    max-width: 80ch; /* Align width with code editor */
+}
+
+#instructions-content {
+    font-size: 1rem;
+    padding-top: 10px;
+}

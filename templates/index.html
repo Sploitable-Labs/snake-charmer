@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Coding Challenges</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Ace Editor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+</head>
+<body style="font-family: 'Roboto', sans-serif;">
+    <header class="bg-dark text-white text-center py-3">
+        <h1><i class="fas fa-code"></i> Python Coding Challenges</h1>
+        <div id="score-banner" class="mt-2">Score: <span id="score">{{ user_data.score }}</span></div>
+    </header>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Left Column: Challenge Selection -->
+            <aside id="menu" class="col-md-3 col-lg-2 bg-light pt-3">
+                {% for category in challenges | groupby("category") %}
+                <div class="category">
+                    <button class="btn btn-outline-primary w-100 mb-2" data-bs-toggle="collapse" data-bs-target="#cat-{{ loop.index }}">
+                        {{ category.grouper }}
+                    </button>
+                    <div class="collapse" id="cat-{{ loop.index }}">
+                        {% for challenge in category.list %}
+                        <button class="btn btn-link text-start w-100 challenge-btn" data-id="{{ challenge.id }}">
+                            <span id="challenge-name-{{ challenge.id }}">{{ challenge.name }}</span>
+                            {% if challenge.id in user_data.completed_challenges %}
+                            <i class="fas fa-check-circle text-success"></i>
+                            {% endif %}
+                        </button>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </aside>
+
+            <!-- Middle Column: Code Editor, Submit Button, Notification Banner -->
+            <main class="col-md-6 col-lg-8 p-4 d-flex flex-column align-items-center">
+                <div class="d-flex justify-content-between align-items-center w-100 mb-3">
+                    <h2 id="challenge-title">Select a challenge to get started</h2>
+                    <div>
+                        <label for="font-size-select" class="form-label">Font Size:</label>
+                        <select id="font-size-select" class="form-select form-select-sm">
+                            {% for size in range(10, 49, 2) %}
+                            <option value="{{ size }}" {% if size == 18 %}selected{% endif %}>{{ size }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div id="code-editor" class="border rounded mb-3" style="height: 400px; max-width: 80ch; width: 100%;"></div>
+                <button id="submit-btn" class="btn btn-success w-100 mb-3"><i class="fas fa-check"></i> Submit Code</button>
+                <div id="message" class="alert d-none w-100"></div>
+            </main>
+
+            <!-- Right Column: Instructions Section -->
+            <aside class="col-md-3 col-lg-2 p-4">
+                <h3>Instructions</h3>
+                <div id="instructions-content">
+                    <p>Select a challenge to see instructions.</p>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Embedding challenges data for JavaScript access -->
+    <script>
+        const challengeData = {{ challenges | tojson }};
+    </script>
+
+    <!-- Bootstrap and Custom JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
