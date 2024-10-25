@@ -7,13 +7,12 @@ app = Flask(__name__)
 with open('data/challenges.json') as f:
     challenges = json.load(f)
 
-# Load user data from JSON or initialize if file does not exist
+# Load or initialize user data
 try:
     with open('data/config.json') as f:
         user_data = json.load(f)
 except FileNotFoundError:
     user_data = {"score": 0, "completed_challenges": []}
-
 
 def run_user_code(code, test_cases):
     """
@@ -45,12 +44,10 @@ def run_user_code(code, test_cases):
         # Capture any exceptions in user code execution
         return False, f"Error: {str(e)}", 0
 
-
 @app.route('/')
 def index():
     # Pass the challenges and user data to the frontend
     return render_template('index.html', challenges=challenges, user_data=user_data)
-
 
 @app.route('/submit', methods=['POST'])
 def submit():
@@ -80,7 +77,6 @@ def submit():
         message = f"Submission failed. {message}"
 
     return jsonify({"success": success, "message": message, "score": user_data['score']})
-
 
 if __name__ == '__main__':
     app.run(debug=True)

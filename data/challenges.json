@@ -2,9 +2,9 @@
     {
         "id": 1,
         "name": "Sum of Two Numbers",
-        "category": "Beginner",
+        "category": "Basic Math",
         "score": 10,
-        "instructions": "Write a function called 'foo' that takes two arguments and returns their sum.",
+        "instructions": "Write a function called 'foo' that takes two numbers as arguments and returns their sum.",
         "test_cases": [
             {"input": [1, 2], "expected_output": 3},
             {"input": [5, 7], "expected_output": 12}
@@ -12,13 +12,102 @@
     },
     {
         "id": 2,
-        "name": "Multiply Two Numbers",
-        "category": "Beginner",
+        "name": "Check Even or Odd",
+        "category": "Conditionals",
         "score": 15,
-        "instructions": "Write a function called 'foo' that takes two arguments and returns their product.",
+        "instructions": "Write a function called 'foo' that takes a single integer as an argument and returns 'Even' if the number is even, and 'Odd' if the number is odd.",
         "test_cases": [
-            {"input": [2, 3], "expected_output": 6},
-            {"input": [4, 5], "expected_output": 20}
+            {"input": [2], "expected_output": "Even"},
+            {"input": [7], "expected_output": "Odd"}
+        ]
+    },
+    {
+        "id": 3,
+        "name": "Sum of List",
+        "category": "Lists",
+        "score": 20,
+        "instructions": "Write a function called 'foo' that takes a list of numbers and returns the sum of all the numbers in the list.",
+        "test_cases": [
+            {"input": [[1, 2, 3]], "expected_output": 6},
+            {"input": [[5, 5, 5]], "expected_output": 15}
+        ]
+    },
+    {
+        "id": 4,
+        "name": "Find Maximum",
+        "category": "Lists",
+        "score": 20,
+        "instructions": "Write a function called 'foo' that takes a list of numbers and returns the maximum value in the list.",
+        "test_cases": [
+            {"input": [[1, 2, 3]], "expected_output": 3},
+            {"input": [[10, 15, 7]], "expected_output": 15}
+        ]
+    },
+    {
+        "id": 5,
+        "name": "Factorial Calculation",
+        "category": "Loops",
+        "score": 25,
+        "instructions": "Write a function called 'foo' that takes a single integer n and returns the factorial of n (n!).",
+        "test_cases": [
+            {"input": [5], "expected_output": 120},
+            {"input": [3], "expected_output": 6}
+        ]
+    },
+    {
+        "id": 6,
+        "name": "String Reversal",
+        "category": "Strings",
+        "score": 15,
+        "instructions": "Write a function called 'foo' that takes a string and returns the string reversed.",
+        "test_cases": [
+            {"input": ["hello"], "expected_output": "olleh"},
+            {"input": ["world"], "expected_output": "dlrow"}
+        ]
+    },
+    {
+        "id": 7,
+        "name": "Count Vowels",
+        "category": "Strings",
+        "score": 20,
+        "instructions": "Write a function called 'foo' that takes a string and returns the number of vowels in the string.",
+        "test_cases": [
+            {"input": ["hello"], "expected_output": 2},
+            {"input": ["world"], "expected_output": 1}
+        ]
+    },
+    {
+        "id": 8,
+        "name": "FizzBuzz",
+        "category": "Conditionals and Loops",
+        "score": 30,
+        "instructions": "Write a function called 'foo' that takes an integer n. For each number from 1 to n, print 'Fizz' if the number is divisible by 3, 'Buzz' if it's divisible by 5, and 'FizzBuzz' if it's divisible by both 3 and 5. Otherwise, print the number itself. Return a list of the results.",
+        "test_cases": [
+            {"input": [5], "expected_output": ["1", "2", "Fizz", "4", "Buzz"]},
+            {"input": [15], "expected_output": ["1", "2", "Fizz", "4", "Buzz", "Fizz", "7", "8", "Fizz", "Buzz", "11", "Fizz", "13", "14", "FizzBuzz"]}
+        ]
+    },
+    {
+        "id": 9,
+        "name": "Generate Multiples of 3",
+        "category": "Loops",
+        "score": 15,
+        "instructions": "Write a function called 'foo' that takes an integer n and returns a list of the first n multiples of 3.",
+        "test_cases": [
+            {"input": [3], "expected_output": [3, 6, 9]},
+            {"input": [5], "expected_output": [3, 6, 9, 12, 15]}
+        ]
+    },
+    {
+        "id": 10,
+        "name": "Prime Checker",
+        "category": "Conditionals and Loops",
+        "score": 25,
+        "instructions": "Write a function called 'foo' that takes a number and returns True if the number is prime, otherwise returns False.",
+        "test_cases": [
+            {"input": [2], "expected_output": true},
+            {"input": [4], "expected_output": false},
+            {"input": [13], "expected_output": true}
         ]
     }
 ]

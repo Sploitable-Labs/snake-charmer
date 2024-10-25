@@ -1,39 +1,51 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // Initialize Ace code editor
     const editor = ace.edit("code-editor");
     editor.setTheme("ace/theme/monokai");
     editor.session.setMode("ace/mode/python");
 
+    // Set the editor to be read-only initially
     editor.setFontSize(18);
-    editor.renderer.setPadding(10); // Add padding inside the editor
+    editor.renderer.setPadding(10);
+    editor.setReadOnly(true); // Initially disable editor
 
-    const fontSizeSelect = document.getElementById('font-size-select');
-    fontSizeSelect.addEventListener('change', function () {
-        editor.setFontSize(parseInt(this.value, 10));
-    });
+    const submitButton = document.getElementById('submit-btn');
 
-    const challenges = challengeData || [];
-    
+    // Attach event listeners to each challenge button
     document.querySelectorAll('.challenge-btn').forEach(button => {
         button.addEventListener('click', function () {
+            // Log to verify which challenge is selected
+            console.log("Challenge button clicked:", this.dataset.id);
+
+            // Set active challenge style and remove it from other buttons
             document.querySelectorAll('.challenge-btn').forEach(btn => btn.classList.remove('active-challenge'));
             this.classList.add('active-challenge');
 
+            // Enable the code editor and submit button
+            editor.setReadOnly(false);
+            submitButton.removeAttribute('disabled');
+  
+            // Update the challenge title and instructions
             const challengeId = parseInt(this.dataset.id);
-            const challenge = challenges.find(c => c.id === challengeId);
-            
+            const challenge = challengeData.find(c => c.id === challengeId);
+
             if (challenge) {
+                console.log("Challenge found:", challenge);
                 document.getElementById('challenge-title').textContent = challenge.name;
                 document.getElementById('instructions-content').innerHTML = `<p>${challenge.instructions}</p>`;
+            } else {
+                console.error("Challenge not found:", challengeId);
             }
         });
     });
 
-    document.getElementById('submit-btn').addEventListener('click', () => {
+    // Handle code submission (remaining functionality)
+    submitButton.addEventListener('click', () => {
         const code = editor.getValue();
         const activeChallenge = document.querySelector('.challenge-btn.active-challenge');
 
         if (!activeChallenge) {
-            showAlert("Please select a challenge.", "warning");
+            showModal("Warning", "Please select a challenge.", "fas fa-exclamation-triangle text-warning");
             return;
         }
 
@@ -46,19 +58,35 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(response => response.json())
         .then(data => {
-            showAlert(data.message, data.success ? "success" : "danger");
-            document.getElementById('score').textContent = data.score;
-
             if (data.success) {
-                activeChallenge.innerHTML += ' <i class="fas fa-check-circle text-success"></i>';
+                showModal("Congratulations!", `Challenge completed! You earned ${data.score} points.`, "fas fa-trophy text-success");
+
+                // Add a single tick mark if the challenge is completed
+                if (!activeChallenge.querySelector('.tick-mark')) {
+                    activeChallenge.innerHTML += ' <i class="fas fa-check-circle tick-mark"></i>';
+                }
+            } else {
+                const failureMessages = [
+                    "Oops! Better luck next time.",
+                    "Close, but not quite!",
+                    "Almost there! Keep trying!",
+                    "Hmm... something went awry!"
+                ];
+                const randomMessage = failureMessages[Math.floor(Math.random() * failureMessages.length)];
+                showModal("Try Again!", randomMessage, "fas fa-times-circle text-danger");
             }
+        })
+        .catch(error => {
+            console.error("Error submitting code:", error);
+            showModal("Error", "An error occurred while submitting the code.", "fas fa-exclamation-triangle text-warning");
         });
     });
 
-    function showAlert(message, type) {
-        const messageDiv = document.getElementById('message');
-        messageDiv.className = `alert alert-${type} mt-3`;
-        messageDiv.textContent = message;
-        messageDiv.classList.remove('d-none');
+    // Function to display modal with title, message, and icon
+    function showModal(title, message, iconClass) {
+        document.getElementById('notificationModalLabel').textContent = title;
+        document.getElementById('modal-message').textContent = message;
+        document.getElementById('modal-icon').className = iconClass;
+        new bootstrap.Modal(document.getElementById('notificationModal')).show();
     }
 });
