@@ -23,6 +23,7 @@ header {
 #challenge-title {
     font-size: 1.5rem;
     text-align: center;
+    font-weight: bold;
 }
 
 /* Enhanced Challenge Menu Styling */
@@ -116,7 +117,7 @@ header {
 
 /* Instructions Section Styling - Left Aligned */
 .instructions-box {
-    background-color: #f4f4f9;
+    background-color: #d2e3f8;
     padding: 15px;
     font-size: 1.1rem;
     max-height: 300px;
@@ -127,3 +128,10 @@ header {
     margin-top: 20px;
     text-align: left;
 }
+
+/* Larger trophy icon in the modal */
+#notificationModal .modal-body #modal-icon {
+    font-size: 10rem; /* Adjust this size as needed */
+    color: gold; /* Optional: change color to make it stand out */
+}
+

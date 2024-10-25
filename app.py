@@ -63,20 +63,23 @@ def submit():
     success, message, points = run_user_code(code, challenge['test_cases'])
     
     if success:
-        # Update score and add challenge to completed list if passed
+        challenge_score = 0  # Initialize variable for points awarded for this challenge
+        # Accumulate the score only if the challenge was not previously completed
         if challenge_id not in user_data['completed_challenges']:
-            user_data['score'] += challenge['score']
-            user_data['completed_challenges'].append(challenge_id)
-            message = f"Challenge completed! You earned {challenge['score']} points."
+            challenge_score = challenge['score']  # Points awarded for this challenge
+            user_data['score'] += challenge_score  # Update total score
+            user_data['completed_challenges'].append(challenge_id)  # Mark challenge as completed
+            message = f"Challenge completed! You earned {challenge_score} points."
 
         # Save user progress to config.json
         with open('data/config.json', 'w') as f:
             json.dump(user_data, f)
-    else:
-        # If not successful, return a failure message with percentage passed
-        message = f"Submission failed. {message}"
 
-    return jsonify({"success": success, "message": message, "score": user_data['score']})
+        # Return success, the total score, and the points for the current challenge
+        return jsonify({"success": success, "message": message, "score": user_data['score'], "challenge_score": challenge_score})
+
+    # If the challenge was not successful
+    return jsonify({"success": False, "message": message})
 
 if __name__ == '__main__':
     app.run(debug=True)

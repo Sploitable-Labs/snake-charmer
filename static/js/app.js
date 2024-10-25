@@ -1,13 +1,19 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Initialize Ace code editor
     const editor = ace.edit("code-editor");
-    editor.setTheme("ace/theme/monokai");
+    //editor.setTheme("ace/theme/monokai");
+    editor.setTheme("ace/theme/solarized_dark");
     editor.session.setMode("ace/mode/python");
 
+    // Enable Active Line Highlighting
+    editor.setOption("highlightActiveLine", true);
+
+    // Enable Persistent Vertical Scrollbar
+    editor.setOption("vScrollBarAlwaysVisible", true);
+
     // Set the editor to be read-only initially
-    editor.setFontSize(18);
+    editor.setFontSize(20);
     editor.renderer.setPadding(10);
-    editor.setReadOnly(true); // Initially disable editor
 
     const submitButton = document.getElementById('submit-btn');
 
@@ -59,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                showModal("Congratulations!", `Challenge completed! You earned ${data.score} points.`, "fas fa-trophy text-success");
+                showModal("Congratulations!", `Challenge completed! You earned ${data.challenge_score} points.`, "fas fa-trophy text-success");
 
                 activeChallenge.classList.add('completed-challenge');
 
@@ -67,6 +73,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (!activeChallenge.querySelector('.tick-mark')) {
                     activeChallenge.innerHTML += ' <i class="fas fa-check-circle tick-mark"></i>';
                 }
+
+                // Update the score on the page without refreshing
+                document.getElementById('score').textContent = data.score;
             } else {
                 const failureMessages = [
                     "Oops! Better luck next time.",
