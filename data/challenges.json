@@ -3,9 +3,13 @@
         "id": 1,
         "name": "Sum of Two Numbers",
         "category": "Basic Math",
+        "difficulty": "Easy",
         "score": 10,
         "instructions": "Write a function called 'foo' that takes two numbers as arguments and returns their sum.",
-        "hints": [],
+        "hints": [
+            {"text": "Use the + operator to add two numbers.", "penalty": 2},
+            {"text": "Return the result directly after the addition.", "penalty": 1}
+        ],
         "test_cases": [
             {"input": [1, 2], "expected_output": 3},
             {"input": [5, 7], "expected_output": 12}
@@ -15,12 +19,12 @@
         "id": 2,
         "name": "Check Even or Odd",
         "category": "Conditionals",
+        "difficulty": "Easy",
         "score": 15,
-        "instructions": "Write a function called 'foo' that takes a single integer as an argument and returns 'Even' if the number is even, and 'Odd' if the number is odd.",
+        "instructions": "Write a function called 'foo' that takes an integer and returns 'Even' if it's even, and 'Odd' if it's odd.",
         "hints": [
             {"text": "Use the modulus operator (%) to check for evenness.", "penalty": 3},
-            {"text": "Return 'Even' if the result is zero.", "penalty": 2},
-            {"text": "Otherwise, return 'Odd'.", "penalty": 1}
+            {"text": "Return 'Even' if the number is divisible by 2 (remainder is 0).", "penalty": 2}
         ],
         "test_cases": [
             {"input": [2], "expected_output": "Even"},
@@ -31,12 +35,12 @@
         "id": 3,
         "name": "Sum of List",
         "category": "Lists",
+        "difficulty": "Easy",
         "score": 20,
-        "instructions": "Write a function called 'foo' that takes a list of numbers and returns the sum of all the numbers in the list.",
+        "instructions": "Write a function called 'foo' that takes a list of numbers and returns the sum of all numbers.",
         "hints": [
-            {"text": "Consider using Python's built-in sum() function.", "penalty": 5},
-            {"text": "Alternatively, use a loop to accumulate the sum.", "penalty": 3},
-            {"text": "Ensure your function returns the accumulated total.", "penalty": 2}
+            {"text": "Try using Python's built-in sum() function.", "penalty": 5},
+            {"text": "Alternatively, iterate through the list and accumulate the sum.", "penalty": 3}
         ],
         "test_cases": [
             {"input": [[1, 2, 3]], "expected_output": 6},
@@ -45,30 +49,31 @@
     },
     {
         "id": 4,
-        "name": "Find Maximum",
-        "category": "Lists",
-        "score": 20,
-        "instructions": "Write a function called 'foo' that takes a list of numbers and returns the maximum value in the list.",
+        "name": "Square Each Number",
+        "category": "Loops",
+        "difficulty": "Easy",
+        "score": 15,
+        "instructions": "Write a function called 'foo' that takes a list of numbers and returns a new list with each number squared.",
         "hints": [
-            {"text": "You can use Python's max() function to find the largest number.", "penalty": 5},
-            {"text": "Try using a loop to compare values if you want to avoid max().", "penalty": 3},
-            {"text": "Make sure your function returns the largest value.", "penalty": 2}
+            {"text": "Use a loop to iterate over each number.", "penalty": 3},
+            {"text": "Multiply each number by itself (square it) and store in a new list.", "penalty": 3}
         ],
         "test_cases": [
-            {"input": [[1, 2, 3]], "expected_output": 3},
-            {"input": [[10, 15, 7]], "expected_output": 15}
+            {"input": [[1, 2, 3]], "expected_output": [1, 4, 9]},
+            {"input": [[4, 5]], "expected_output": [16, 25]}
         ]
     },
     {
         "id": 5,
         "name": "Factorial Calculation",
         "category": "Loops",
+        "difficulty": "Medium",
         "score": 25,
-        "instructions": "Write a function called 'foo' that takes a single integer n and returns the factorial of n (n!).",
+        "instructions": "Write a function called 'foo' that takes an integer n and returns the factorial of n.",
         "hints": [
-            {"text": "Use a loop or recursion to calculate the factorial.", "penalty": 7},
-            {"text": "Multiply n by each number less than n down to 1.", "penalty": 5},
-            {"text": "For n = 0, return 1 as a factorial.", "penalty": 3}
+            {"text": "Use a loop or recursion to calculate factorials.", "penalty": 5},
+            {"text": "Start with a result of 1 and multiply it by each number down to 1.", "penalty": 3},
+            {"text": "Remember, factorial of 0 is 1.", "penalty": 2}
         ],
         "test_cases": [
             {"input": [5], "expected_output": 120},
@@ -77,14 +82,14 @@
     },
     {
         "id": 6,
-        "name": "String Reversal",
+        "name": "Reverse String",
         "category": "Strings",
-        "score": 15,
+        "difficulty": "Medium",
+        "score": 20,
         "instructions": "Write a function called 'foo' that takes a string and returns the string reversed.",
         "hints": [
-            {"text": "Use slicing with [::-1] to reverse a string in Python.", "penalty": 3},
-            {"text": "You could also use a loop to build the reversed string.", "penalty": 2},
-            {"text": "Ensure your function returns the reversed string.", "penalty": 1}
+            {"text": "Use Python slicing with [::-1] to reverse a string.", "penalty": 3},
+            {"text": "You could also use a loop to build the reversed string.", "penalty": 2}
         ],
         "test_cases": [
             {"input": ["hello"], "expected_output": "olleh"},
@@ -95,12 +100,12 @@
         "id": 7,
         "name": "Count Vowels",
         "category": "Strings",
+        "difficulty": "Medium",
         "score": 20,
-        "instructions": "Write a function called 'foo' that takes a string and returns the number of vowels in the string.",
+        "instructions": "Write a function called 'foo' that takes a string and returns the count of vowels.",
         "hints": [
-            {"text": "Use a loop to iterate through the string.", "penalty": 5},
-            {"text": "Check if each character is a vowel (a, e, i, o, u).", "penalty": 3},
-            {"text": "Use a count variable to accumulate the number of vowels.", "penalty": 2}
+            {"text": "Use a loop to go through each character in the string.", "penalty": 3},
+            {"text": "Check if each character is one of 'a', 'e', 'i', 'o', 'u' (case insensitive).", "penalty": 3}
         ],
         "test_cases": [
             {"input": ["hello"], "expected_output": 2},
@@ -109,50 +114,437 @@
     },
     {
         "id": 8,
-        "name": "FizzBuzz",
-        "category": "Conditionals and Loops",
+        "name": "Remove Duplicates",
+        "category": "Lists",
+        "difficulty": "Medium",
         "score": 30,
-        "instructions": "Write a function called 'foo' that takes an integer n. For each number from 1 to n, print 'Fizz' if the number is divisible by 3, 'Buzz' if it's divisible by 5, and 'FizzBuzz' if it's divisible by both 3 and 5. Otherwise, print the number itself. Return a list of the results.",
+        "instructions": "Write a function called 'foo' that removes duplicates from a list and returns the unique items.",
         "hints": [
-            {"text": "Use a loop to iterate from 1 to n.", "penalty": 5},
-            {"text": "Check divisibility using % operator for 3 and 5.", "penalty": 5},
-            {"text": "Use conditional statements to handle 'Fizz', 'Buzz', and 'FizzBuzz'.", "penalty": 5}
+            {"text": "Use a set to store unique elements.", "penalty": 5},
+            {"text": "Convert the set back to a list to match the expected output type.", "penalty": 2}
         ],
         "test_cases": [
-            {"input": [15], "expected_output": [1, 2, "Fizz", 4, "Buzz", "Fizz", 7, 8, "Fizz", "Buzz", 11, "Fizz", 13, 14, "FizzBuzz"]}
+            {"input": [[1, 2, 2, 3]], "expected_output": [1, 2, 3]},
+            {"input": [[4, 5, 5, 6, 6]], "expected_output": [4, 5, 6]}
         ]
     },
     {
         "id": 9,
-        "name": "Generate Multiples of 3",
-        "category": "Loops",
-        "score": 15,
-        "instructions": "Write a function called 'foo' that takes an integer n and returns a list of the first n multiples of 3.",
-        "hints": [
-            {"text": "Use a loop to generate the multiples of 3.", "penalty": 3},
-            {"text": "Multiply the loop index by 3 to get each multiple.", "penalty": 2},
-            {"text": "Return the list of multiples.", "penalty": 1}
-        ],
-        "test_cases": [
-            {"input": [3], "expected_output": [3, 6, 9]},
-            {"input": [5], "expected_output": [3, 6, 9, 12, 15]}
-        ]
-    },
-    {
-        "id": 10,
         "name": "Prime Checker",
         "category": "Conditionals and Loops",
-        "score": 25,
-        "instructions": "Write a function called 'foo' that takes a number and returns True if the number is prime, otherwise returns False.",
+        "difficulty": "Hard",
+        "score": 30,
+        "instructions": "Write a function called 'foo' that takes a number and returns True if the number is prime, else False.",
         "hints": [
-            {"text": "A prime number has no divisors other than 1 and itself.", "penalty": 7},
-            {"text": "Check divisibility starting from 2 up to the square root of n.", "penalty": 5},
-            {"text": "Return True if no divisors are found, else return False.", "penalty": 3}
+            {"text": "Prime numbers have no divisors other than 1 and itself.", "penalty": 5},
+            {"text": "You only need to check divisibility up to the square root of n.", "penalty": 3}
         ],
         "test_cases": [
             {"input": [2], "expected_output": true},
             {"input": [4], "expected_output": false},
             {"input": [13], "expected_output": true}
+        ]
+    },
+    {
+        "id": 10,
+        "name": "FizzBuzz",
+        "category": "Conditionals and Loops",
+        "difficulty": "Hard",
+        "score": 30,
+        "instructions": "Write a function called 'foo' that returns 'Fizz', 'Buzz', or 'FizzBuzz' based on divisibility.",
+        "hints": [
+            {"text": "Use % to check divisibility by 3 and 5.", "penalty": 5},
+            {"text": "Use if statements to check conditions in the order: FizzBuzz, Fizz, Buzz.", "penalty": 3}
+        ],
+        "test_cases": [
+            {"input": [5], "expected_output": ["1", "2", "Fizz", "4", "Buzz"]},
+            {"input": [15], "expected_output": ["1", "2", "Fizz", "4", "Buzz", "Fizz", "7", "8", "Fizz", "Buzz", "11", "Fizz", "13", "14", "FizzBuzz"]}
+        ]
+    },
+    {
+        "id": 11,
+        "name": "Palindrome Checker",
+        "category": "Strings",
+        "difficulty": "Medium",
+        "score": 25,
+        "instructions": "Write a function called 'foo' that checks if a string is a palindrome.",
+        "hints": [
+            {"text": "A palindrome reads the same forwards and backwards.", "penalty": 3},
+            {"text": "Compare the string with its reversed version.", "penalty": 2}
+        ],
+        "test_cases": [
+            {"input": ["radar"], "expected_output": true},
+            {"input": ["hello"], "expected_output": false}
+        ]
+    },
+    {
+        "id": 12,
+        "name": "Fibonacci Sequence",
+        "category": "Loops",
+        "difficulty": "Hard",
+        "score": 40,
+        "instructions": "Write a function called 'foo' that generates the first n Fibonacci numbers.",
+        "hints": [
+            {"text": "Fibonacci numbers are generated by adding the previous two numbers.", "penalty": 5},
+            {"text": "Start with [0, 1] and use a loop to add the next number.", "penalty": 3}
+        ],
+        "test_cases": [
+            {"input": [5], "expected_output": [0, 1, 1, 2, 3]},
+            {"input": [7], "expected_output": [0, 1, 1, 2, 3, 5, 8]}
+        ]
+    },
+    {
+        "id": 13,
+        "name": "Absolute Difference",
+        "category": "Math",
+        "difficulty": "Easy",
+        "score": 10,
+        "instructions": "Write a function called 'foo' that takes two integers and returns their absolute difference.",
+        "hints": [
+            {"text": "The absolute difference between two numbers can be found by subtracting and taking the absolute value.", "penalty": 2},
+            {"text": "Use Python's built-in abs() function.", "penalty": 1}
+        ],
+        "test_cases": [
+            {"input": [5, 3], "expected_output": 2},
+            {"input": [10, 20], "expected_output": 10}
+        ]
+    },
+    {
+        "id": 14,
+        "name": "Find Minimum",
+        "category": "Lists",
+        "difficulty": "Easy",
+        "score": 15,
+        "instructions": "Write a function called 'foo' that takes a list of numbers and returns the smallest number.",
+        "hints": [
+            {"text": "Try using Python's min() function.", "penalty": 2},
+            {"text": "You could also use a loop to track the smallest number found.", "penalty": 3}
+        ],
+        "test_cases": [
+            {"input": [[4, 2, 9, 3]], "expected_output": 2},
+            {"input": [[10, 5, 1, 7]], "expected_output": 1}
+        ]
+    },
+    {
+        "id": 15,
+        "name": "Count Occurrences",
+        "category": "Lists",
+        "difficulty": "Easy",
+        "score": 15,
+        "instructions": "Write a function called 'foo' that takes a list and a target element, and returns how many times the target appears in the list.",
+        "hints": [
+            {"text": "Use a loop to iterate over each element in the list.", "penalty": 3},
+            {"text": "Alternatively, consider the count() method for lists in Python.", "penalty": 2}
+        ],
+        "test_cases": [
+            {"input": [[1, 2, 2, 3], 2], "expected_output": 2},
+            {"input": [[4, 4, 5, 4], 4], "expected_output": 3}
+        ]
+    },
+    {
+        "id": 16,
+        "name": "Check Substring",
+        "category": "Strings",
+        "difficulty": "Medium",
+        "score": 20,
+        "instructions": "Write a function called 'foo' that takes two strings, and returns True if the second string is a substring of the first, otherwise False.",
+        "hints": [
+            {"text": "Use Python's 'in' keyword to check if one string is in another.", "penalty": 3},
+            {"text": "You could also use the find() method for strings.", "penalty": 2}
+        ],
+        "test_cases": [
+            {"input": ["hello world", "world"], "expected_output": true},
+            {"input": ["python", "java"], "expected_output": false}
+        ]
+    },
+    {
+        "id": 17,
+        "name": "Square Root Approximation",
+        "category": "Math",
+        "difficulty": "Medium",
+        "score": 25,
+        "instructions": "Write a function called 'foo' that takes a number and returns an approximation of its square root using the Babylonian method.",
+        "hints": [
+            {"text": "Start with an initial guess, then iteratively improve it.", "penalty": 5},
+            {"text": "Update the guess using (guess + number / guess) / 2 in each iteration.", "penalty": 5}
+        ],
+        "test_cases": [
+            {"input": [16], "expected_output": 4},
+            {"input": [25], "expected_output": 5}
+        ]
+    },
+    {
+        "id": 18,
+        "name": "Find All Factors",
+        "category": "Loops",
+        "difficulty": "Medium",
+        "score": 25,
+        "instructions": "Write a function called 'foo' that takes an integer and returns a list of all its factors.",
+        "hints": [
+            {"text": "A factor of a number divides it without leaving a remainder.", "penalty": 4},
+            {"text": "Use a loop from 1 up to the number to check divisibility.", "penalty": 3}
+        ],
+        "test_cases": [
+            {"input": [12], "expected_output": [1, 2, 3, 4, 6, 12]},
+            {"input": [15], "expected_output": [1, 3, 5, 15]}
+        ]
+    },
+    {
+        "id": 19,
+        "name": "Check Armstrong Number",
+        "category": "Math",
+        "difficulty": "Hard",
+        "score": 30,
+        "instructions": "Write a function called 'foo' that checks if a number is an Armstrong number. A number is an Armstrong number if the sum of its own digits each raised to the power of the number of digits is equal to the number itself.",
+        "hints": [
+            {"text": "Convert the number to a string to iterate over each digit.", "penalty": 5},
+            {"text": "Raise each digit to the power of the number of digits.", "penalty": 5}
+        ],
+        "test_cases": [
+            {"input": [153], "expected_output": true},
+            {"input": [9474], "expected_output": true},
+            {"input": [123], "expected_output": false}
+        ]
+    },
+    {
+        "id": 20,
+        "name": "Binary to Decimal",
+        "category": "Conversions",
+        "difficulty": "Medium",
+        "score": 25,
+        "instructions": "Write a function called 'foo' that converts a binary string to its decimal representation.",
+        "hints": [
+            {"text": "Use Python's int() function with base 2 to convert binary to decimal.", "penalty": 5},
+            {"text": "Alternatively, implement manually by multiplying each bit by powers of 2.", "penalty": 5}
+        ],
+        "test_cases": [
+            {"input": ["1010"], "expected_output": 10},
+            {"input": ["1101"], "expected_output": 13}
+        ]
+    },
+    {
+        "id": 21,
+        "name": "Anagram Checker",
+        "category": "Strings",
+        "difficulty": "Hard",
+        "score": 30,
+        "instructions": "Write a function called 'foo' that takes two strings and checks if they are anagrams.",
+        "hints": [
+            {"text": "Two strings are anagrams if they have the same characters in the same frequencies.", "penalty": 4},
+            {"text": "Sort both strings and compare them.", "penalty": 5}
+        ],
+        "test_cases": [
+            {"input": ["listen", "silent"], "expected_output": true},
+            {"input": ["hello", "world"], "expected_output": false}
+        ]
+    },
+    {
+        "id": 22,
+        "name": "Find GCD",
+        "category": "Math",
+        "difficulty": "Medium",
+        "score": 25,
+        "instructions": "Write a function called 'foo' that takes two integers and returns their Greatest Common Divisor (GCD).",
+        "hints": [
+            {"text": "Try using the Euclidean algorithm for GCD.", "penalty": 5},
+            {"text": "GCD of two numbers can be found by repeatedly subtracting the smaller number from the larger.", "penalty": 5}
+        ],
+        "test_cases": [
+            {"input": [8, 12], "expected_output": 4},
+            {"input": [18, 24], "expected_output": 6}
+        ]
+    },
+    {
+        "id": 23,
+        "name": "Check Perfect Number",
+        "category": "Math",
+        "difficulty": "Hard",
+        "score": 30,
+        "instructions": "Write a function called 'foo' that checks if a number is a perfect number. A perfect number is equal to the sum of its proper divisors.",
+        "hints": [
+            {"text": "Proper divisors of a number exclude the number itself.", "penalty": 5},
+            {"text": "Use a loop to find divisors and accumulate the sum.", "penalty": 5}
+        ],
+        "test_cases": [
+            {"input": [6], "expected_output": true},
+            {"input": [28], "expected_output": true},
+            {"input": [12], "expected_output": false}
+        ]
+    },
+    {
+        "id": 24,
+        "name": "Decimal to Binary",
+        "category": "Conversions",
+        "difficulty": "Medium",
+        "score": 20,
+        "instructions": "Write a function called 'foo' that converts a decimal integer to its binary representation.",
+        "hints": [
+            {"text": "Use Python's bin() function to convert decimal to binary.", "penalty": 5},
+            {"text": "Alternatively, use a loop to divide by 2 and track the remainders.", "penalty": 5}
+        ],
+        "test_cases": [
+            {"input": [10], "expected_output": "1010"},
+            {"input": [15], "expected_output": "1111"}
+        ]
+    },
+    {
+        "id": 25,
+        "name": "Extract Keys",
+        "category": "Dictionaries",
+        "difficulty": "Easy",
+        "score": 10,
+        "instructions": "Write a function called 'foo' that takes a dictionary and returns a list of its keys.",
+        "hints": [
+            {"text": "Use the .keys() method to get all keys in a dictionary.", "penalty": 2},
+            {"text": "Convert the keys view to a list using list().", "penalty": 1}
+        ],
+        "test_cases": [
+            {"input": [{"a": 1, "b": 2, "c": 3}], "expected_output": ["a", "b", "c"]},
+            {"input": [{"x": 5, "y": 10}], "expected_output": ["x", "y"]}
+        ]
+    },
+    {
+        "id": 26,
+        "name": "Sum Dictionary Values",
+        "category": "Dictionaries",
+        "difficulty": "Easy",
+        "score": 15,
+        "instructions": "Write a function called 'foo' that takes a dictionary with numeric values and returns the sum of all values.",
+        "hints": [
+            {"text": "Use the .values() method to access all values in a dictionary.", "penalty": 2},
+            {"text": "Pass the values to the sum() function to get the total.", "penalty": 1}
+        ],
+        "test_cases": [
+            {"input": [{"a": 1, "b": 2, "c": 3}], "expected_output": 6},
+            {"input": [{"x": 10, "y": 20, "z": 30}], "expected_output": 60}
+        ]
+    },
+    {
+        "id": 27,
+        "name": "Count Characters in String",
+        "category": "Dictionaries",
+        "difficulty": "Medium",
+        "score": 20,
+        "instructions": "Write a function called 'foo' that takes a string and returns a dictionary where the keys are characters and values are the number of times each character appears.",
+        "hints": [
+            {"text": "Loop through each character in the string.", "penalty": 3},
+            {"text": "Use a dictionary to store character counts, initializing each count to 0.", "penalty": 3}
+        ],
+        "test_cases": [
+            {"input": ["hello"], "expected_output": {"h": 1, "e": 1, "l": 2, "o": 1}},
+            {"input": ["test"], "expected_output": {"t": 2, "e": 1, "s": 1}}
+        ]
+    },
+    {
+        "id": 28,
+        "name": "Find Maximum in Tuple",
+        "category": "Tuples",
+        "difficulty": "Easy",
+        "score": 15,
+        "instructions": "Write a function called 'foo' that takes a tuple of numbers and returns the maximum value.",
+        "hints": [
+            {"text": "Use Python's max() function to find the maximum in a tuple.", "penalty": 2},
+            {"text": "Ensure your function returns the result of max().", "penalty": 1}
+        ],
+        "test_cases": [
+            {"input": [[1, 5, 3, 9]], "expected_output": 9},
+            {"input": [[10, 15, 5]], "expected_output": 15}
+        ]
+    },
+    {
+        "id": 29,
+        "name": "Dictionary to List of Tuples",
+        "category": "Dictionaries",
+        "difficulty": "Medium",
+        "score": 20,
+        "instructions": "Write a function called 'foo' that takes a dictionary and returns a list of tuples where each tuple is a key-value pair from the dictionary.",
+        "hints": [
+            {"text": "Use the .items() method to get key-value pairs as tuples.", "penalty": 3},
+            {"text": "Convert the result of .items() to a list if needed.", "penalty": 2}
+        ],
+        "test_cases": [
+            {"input": [{"a": 1, "b": 2}], "expected_output": [["a", 1], ["b", 2]]},
+            {"input": [{"x": 5, "y": 10}], "expected_output": [["x", 5], ["y", 10]]}
+        ]
+    },
+    {
+        "id": 30,
+        "name": "Find Tuple with Maximum Sum",
+        "category": "Tuples",
+        "difficulty": "Hard",
+        "score": 30,
+        "instructions": "Write a function called 'foo' that takes a list of tuples, where each tuple contains numbers, and returns the tuple with the highest sum of elements.",
+        "hints": [
+            {"text": "Calculate the sum of each tuple using sum() and compare.", "penalty": 4},
+            {"text": "Use max() with a key function to find the tuple with the largest sum.", "penalty": 3}
+        ],
+        "test_cases": [
+            {"input": [[[1, 2], [3, 4], [5, 6]]], "expected_output": [5, 6]},
+            {"input": [[[10, 5], [3, 7], [8, 9]]], "expected_output": [8, 9]}
+        ]
+    },
+    {
+        "id": 31,
+        "name": "Merge Dictionaries",
+        "category": "Dictionaries",
+        "difficulty": "Medium",
+        "score": 25,
+        "instructions": "Write a function called 'foo' that takes two dictionaries and returns a new dictionary containing all key-value pairs from both, with values from the second dictionary overwriting those from the first if keys overlap.",
+        "hints": [
+            {"text": "Use dictionary unpacking (**) to merge dictionaries.", "penalty": 4},
+            {"text": "Alternatively, use dict.update() to merge two dictionaries.", "penalty": 3}
+        ],
+        "test_cases": [
+            {"input": [{"a": 1, "b": 2}, {"b": 3, "c": 4}], "expected_output": {"a": 1, "b": 3, "c": 4}},
+            {"input": [{"x": 10}, {"y": 20, "x": 30}], "expected_output": {"x": 30, "y": 20}}
+        ]
+    },
+    {
+        "id": 32,
+        "name": "Tuple Packing",
+        "category": "Tuples",
+        "difficulty": "Easy",
+        "score": 15,
+        "instructions": "Write a function called 'foo' that takes any number of arguments and returns them as a tuple.",
+        "hints": [
+            {"text": "Use the *args syntax to accept an arbitrary number of arguments.", "penalty": 2},
+            {"text": "Simply return args, which will be a tuple of all arguments.", "penalty": 1}
+        ],
+        "test_cases": [
+            {"input": [1, 2, 3], "expected_output": [1, 2, 3]},
+            {"input": ["a", "b", "c"], "expected_output": ["a", "b", "c"]}
+        ]
+    },
+    {
+        "id": 33,
+        "name": "Invert Dictionary",
+        "category": "Dictionaries",
+        "difficulty": "Hard",
+        "score": 30,
+        "instructions": "Write a function called 'foo' that inverts a dictionary by swapping keys and values. Assume all values are unique.",
+        "hints": [
+            {"text": "Use a dictionary comprehension to swap keys and values.", "penalty": 5},
+            {"text": "Remember to handle the inversion in one line if possible.", "penalty": 3}
+        ],
+        "test_cases": [
+            {"input": [{"a": 1, "b": 2}], "expected_output": {"1": "a", "2": "b"}},
+            {"input": [{"x": 10, "y": 20}], "expected_output": {"10": "x", "20": "y"}}
+        ]
+    },
+    {
+        "id": 34,
+        "name": "Convert Tuples to Dictionary",
+        "category": "Dictionaries and Tuples",
+        "difficulty": "Medium",
+        "score": 20,
+        "instructions": "Write a function called 'foo' that takes a list of tuples, each containing two elements, and converts it to a dictionary where each tuple's first element is a key and the second is a value.",
+        "hints": [
+            {"text": "Use dict() to convert a list of tuples directly to a dictionary.", "penalty": 3},
+            {"text": "Alternatively, iterate through the list and add each tuple as a key-value pair to the dictionary.", "penalty": 4}
+        ],
+        "test_cases": [
+            {"input": [[["a", 1], ["b", 2]]], "expected_output": {"a": 1, "b": 2}},
+            {"input": [[["x", 10], ["y", 20]]], "expected_output": {"x": 10, "y": 20}}
         ]
     }
 ]

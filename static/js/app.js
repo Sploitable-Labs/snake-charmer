@@ -23,8 +23,6 @@ document.addEventListener('DOMContentLoaded', function () {
         button.addEventListener('click', function () {
             console.log("Challenge button clicked:", this.dataset.id);
 
-            document.querySelectorAll('.challenge-btn').forEach(btn => btn.classList.remove('active-challenge'));
-            this.classList.add('active-challenge');
 
             editor.setReadOnly(false);
             submitButton.removeAttribute('disabled');
@@ -105,7 +103,6 @@ document.addEventListener('DOMContentLoaded', function () {
             if (data.success) {
                 showModal("Congratulations!", `Challenge completed! You earned ${data.challenge_score} points.`, "fas fa-trophy text-success");
 
-                activeChallenge.classList.add('completed-challenge');
                 if (!activeChallenge.querySelector('.tick-mark')) {
                     activeChallenge.innerHTML += ' <i class="fas fa-check-circle tick-mark"></i>';
                 }
