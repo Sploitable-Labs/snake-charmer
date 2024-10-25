@@ -26,12 +26,6 @@ header {
     font-weight: bold;
 }
 
-/* Enhanced Challenge Menu Styling */
-.custom-menu {
-    padding: 15px;
-    background-color: #f4f4f9;
-}
-
 /* Updated Category Title Styling */
 .category-title {
     font-size: 1.2rem;
@@ -188,4 +182,12 @@ header {
 
 .footer a:hover {
     text-decoration: underline; /* Optional: underline on hover for clarity */
+}
+
+.challenge-menu {
+    max-height: calc(100vh - 150px);; /* Set a fixed height for the scroll area */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ddd; /* Optional: Add a border for visual separation */
+    padding: 15px;
+    background-color: #f4f4f9;
 }
