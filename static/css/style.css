@@ -150,3 +150,30 @@ header {
     width: 100%;
     margin-top: 5px;
 }
+
+/* Footer Styling */
+.footer {
+    background-color: #343a40; /* Same color as header */
+    color: white;
+    text-align: center;
+    height: 50px; /* Fixed height */
+    line-height: 50px; /* Matches the height for perfect vertical centering */
+    font-size: 1rem; /* Small text */
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    display: flex;
+    justify-content: center; /* Center text horizontally */
+    align-items: center; /* Center text vertically */
+    padding: 0; /* Reset padding, as height will control the spacing */
+    vertical-align: middle;
+}
+
+.footer a {
+    color: inherit; /* Inherit color from footer */
+    text-decoration: none; /* Remove underline */
+}
+
+.footer a:hover {
+    text-decoration: underline; /* Optional: underline on hover for clarity */
+}
