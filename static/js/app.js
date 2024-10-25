@@ -1,51 +1,89 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Initialize Ace code editor
     const editor = ace.edit("code-editor");
-    //editor.setTheme("ace/theme/monokai");
     editor.setTheme("ace/theme/solarized_dark");
     editor.session.setMode("ace/mode/python");
 
-    // Enable Active Line Highlighting
     editor.setOption("highlightActiveLine", true);
-
-    // Enable Persistent Vertical Scrollbar
     editor.setOption("vScrollBarAlwaysVisible", true);
-
-    // Set the editor to be read-only initially
     editor.setFontSize(20);
     editor.renderer.setPadding(10);
+    editor.setReadOnly(true);
 
     const submitButton = document.getElementById('submit-btn');
+    const availableScoreElement = document.getElementById('available-score');
+    const hintButtonsContainer = document.getElementById('hint-buttons');
+    const hintContent = document.getElementById('hint-content');
+    const hintsHeader = document.getElementById('hints-header');
+
+    let currentChallenge = null;
+    let availableScore = 0;
 
     // Attach event listeners to each challenge button
     document.querySelectorAll('.challenge-btn').forEach(button => {
         button.addEventListener('click', function () {
-            // Log to verify which challenge is selected
             console.log("Challenge button clicked:", this.dataset.id);
 
-            // Set active challenge style and remove it from other buttons
             document.querySelectorAll('.challenge-btn').forEach(btn => btn.classList.remove('active-challenge'));
             this.classList.add('active-challenge');
 
-            // Enable the code editor and submit button
             editor.setReadOnly(false);
             submitButton.removeAttribute('disabled');
   
-            // Update the challenge title and instructions
             const challengeId = parseInt(this.dataset.id);
-            const challenge = challengeData.find(c => c.id === challengeId);
+            currentChallenge = challengeData.find(c => c.id === challengeId);
 
-            if (challenge) {
-                console.log("Challenge found:", challenge);
-                document.getElementById('challenge-title').textContent = challenge.name;
-                document.getElementById('instructions-text').innerHTML = `<p>${challenge.instructions}</p>`;
+            if (currentChallenge) {
+                console.log("Challenge found:", currentChallenge);
+                document.getElementById('challenge-title').textContent = currentChallenge.name;
+                document.getElementById('instructions-text').innerHTML = `<p>${currentChallenge.instructions}</p>`;
+
+                availableScore = currentChallenge.score;
+                updateAvailableScore();
+
+                // Generate hints based on the current challenge's hints
+                resetHints();
+                if (currentChallenge.hints && currentChallenge.hints.length > 0) {
+                    hintsHeader.style.display = 'block'; // Show the hints header
+                    currentChallenge.hints.forEach((hint, index) => {
+                        const hintButton = document.createElement('button');
+                        hintButton.classList.add('btn', 'btn-outline-secondary', 'hint-btn');
+                        hintButton.textContent = `Reveal Hint ${index + 1}`;
+                        hintButton.dataset.hintIndex = index;
+                        hintButton.addEventListener('click', () => revealHint(index, hint.penalty, hint.text));
+                        hintButtonsContainer.appendChild(hintButton);
+                    });
+                } else {
+                    hintsHeader.style.display = 'none'; // Hide the hints header if no hints
+                }
             } else {
                 console.error("Challenge not found:", challengeId);
             }
         });
     });
 
-    // Handle code submission (remaining functionality)
+    // Function to reveal a hint and apply penalty
+    function revealHint(index, penalty, text) {
+        availableScore = Math.max(0, availableScore - penalty); // Deduct score but keep non-negative
+        updateAvailableScore();
+
+        // Display the hint text in the hint content section
+        hintContent.innerHTML += `<p>${text}</p>`;
+
+        // Disable the hint button after revealing
+        document.querySelector(`.hint-btn[data-hint-index="${index}"]`).disabled = true;
+    }
+
+    // Function to update the available score display
+    function updateAvailableScore() {
+        availableScoreElement.textContent = availableScore;
+    }
+
+    // Function to reset hints and re-enable hint buttons for a new challenge
+    function resetHints() {
+        hintContent.innerHTML = "";
+        hintButtonsContainer.innerHTML = ""; // Clear previous hint buttons
+    }
+
     submitButton.addEventListener('click', () => {
         const code = editor.getValue();
         const activeChallenge = document.querySelector('.challenge-btn.active-challenge');
@@ -68,14 +106,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 showModal("Congratulations!", `Challenge completed! You earned ${data.challenge_score} points.`, "fas fa-trophy text-success");
 
                 activeChallenge.classList.add('completed-challenge');
-
-                // Add a single tick mark if the challenge is completed
                 if (!activeChallenge.querySelector('.tick-mark')) {
                     activeChallenge.innerHTML += ' <i class="fas fa-check-circle tick-mark"></i>';
                 }
 
-                // Update the score on the page without refreshing
                 document.getElementById('score').textContent = data.score;
+
+                availableScore = 0;
+                updateAvailableScore();
             } else {
                 const failureMessages = [
                     "Oops! Better luck next time.",
@@ -93,7 +131,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Function to display modal with title, message, and icon
     function showModal(title, message, iconClass) {
         document.getElementById('notificationModalLabel').textContent = title;
         document.getElementById('modal-message').textContent = message;

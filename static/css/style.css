@@ -135,3 +135,18 @@ header {
     color: gold; /* Optional: change color to make it stand out */
 }
 
+#hint-panel {
+    padding: 15px;
+    border-left: 1px solid #ccc;
+}
+
+#available-score {
+    font-size: 1.5rem;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.hint-btn {
+    width: 100%;
+    margin-top: 5px;
+}
