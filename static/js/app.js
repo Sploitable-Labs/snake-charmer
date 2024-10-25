@@ -11,6 +11,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const submitButton = document.getElementById('submit-btn');
 
+    // Set initial styles for completed challenges
+    challengeData.forEach(challenge => {
+        const button = document.querySelector(`.challenge-btn[data-id="${challenge.id}"]`);
+        if (button && challenge.completed) {
+            button.classList.add('completed-challenge');
+            button.innerHTML += ' <i class="fas fa-check-circle tick-mark"></i>';
+        }
+    });
+
     // Attach event listeners to each challenge button
     document.querySelectorAll('.challenge-btn').forEach(button => {
         button.addEventListener('click', function () {
@@ -32,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (challenge) {
                 console.log("Challenge found:", challenge);
                 document.getElementById('challenge-title').textContent = challenge.name;
-                document.getElementById('instructions-content').innerHTML = `<p>${challenge.instructions}</p>`;
+                document.getElementById('instructions-text').innerHTML = `<p>${challenge.instructions}</p>`;
             } else {
                 console.error("Challenge not found:", challengeId);
             }
@@ -60,6 +69,8 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             if (data.success) {
                 showModal("Congratulations!", `Challenge completed! You earned ${data.score} points.`, "fas fa-trophy text-success");
+
+                activeChallenge.classList.add('completed-challenge');
 
                 // Add a single tick mark if the challenge is completed
                 if (!activeChallenge.querySelector('.tick-mark')) {

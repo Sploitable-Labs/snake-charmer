@@ -31,6 +31,7 @@ header {
     background-color: #f4f4f9;
 }
 
+/* Updated Category Title Styling */
 .category-title {
     font-size: 1.2rem;
     font-weight: bold;
@@ -44,6 +45,11 @@ header {
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
+    justify-content: space-between; /* Space between name and chevron */
+}
+
+.category-title i {
+    margin-left: 8px; /* Add space between the text and chevron */
 }
 
 .category-title:hover {
@@ -60,6 +66,7 @@ header {
     transition: height 0.3s ease;
 }
 
+/* Default Styling for Challenge Buttons */
 .challenge-btn {
     color: #333;
     text-decoration: none;
@@ -72,16 +79,24 @@ header {
     transition: all 0.3s ease;
 }
 
+/* Hover Effect for Uncompleted Challenges */
 .challenge-btn:hover {
     background-color: #d3d3d3;
 }
 
+/* Styling for Active Challenge */
 .active-challenge {
-    background-color: #fdfd96;
+    background-color: #fdfd96; /* Light yellow for active */
 }
 
+/* Styling for Completed Challenges */
+.completed-challenge {
+    background-color: #90EE90; /* Light green background */
+}
+
+/* Dark Green Tick Mark for Completed Challenges */
 .challenge-btn .tick-mark {
-    color: #90ee90;
+    color: #155724; /* Dark green tick mark */
     margin-left: 5px;
 }
 
