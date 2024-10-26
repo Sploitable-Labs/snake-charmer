@@ -1,0 +1,66 @@
+[
+    {
+        "id": 3,
+        "name": "Sum of List",
+        "category": "Lists",
+        "difficulty": "Easy",
+        "score": 20,
+        "instructions": "Write a function called 'foo' that takes a list of numbers and returns the sum of all numbers.",
+        "hints": [
+            {"text": "Try using Python's built-in sum() function.", "penalty": 5},
+            {"text": "Alternatively, iterate through the list and accumulate the sum.", "penalty": 3}
+        ],
+        "test_cases": [
+            {"input": [[1, 2, 3]], "expected_output": 6},
+            {"input": [[5, 5, 5]], "expected_output": 15}
+        ]
+    },
+    {
+        "id": 14,
+        "name": "Find Minimum",
+        "category": "Lists",
+        "difficulty": "Easy",
+        "score": 15,
+        "instructions": "Write a function called 'foo' that takes a list of numbers and returns the smallest number.",
+        "hints": [
+            {"text": "Try using Python's min() function.", "penalty": 2},
+            {"text": "You could also use a loop to track the smallest number found.", "penalty": 3}
+        ],
+        "test_cases": [
+            {"input": [[4, 2, 9, 3]], "expected_output": 2},
+            {"input": [[10, 5, 1, 7]], "expected_output": 1}
+        ]
+    },
+    {
+        "id": 15,
+        "name": "Count Occurrences",
+        "category": "Lists",
+        "difficulty": "Easy",
+        "score": 15,
+        "instructions": "Write a function called 'foo' that takes a list and a target element, and returns how many times the target appears in the list.",
+        "hints": [
+            {"text": "Use a loop to iterate over each element in the list.", "penalty": 3},
+            {"text": "Alternatively, consider the count() method for lists in Python.", "penalty": 2}
+        ],
+        "test_cases": [
+            {"input": [[1, 2, 2, 3], 2], "expected_output": 2},
+            {"input": [[4, 4, 5, 4], 4], "expected_output": 3}
+        ]
+    },
+    {
+        "id": 8,
+        "name": "Remove Duplicates",
+        "category": "Lists",
+        "difficulty": "Medium",
+        "score": 30,
+        "instructions": "Write a function called 'foo' that removes duplicates from a list and returns the unique items.",
+        "hints": [
+            {"text": "Use a set to store unique elements.", "penalty": 5},
+            {"text": "Convert the set back to a list to match the expected output type.", "penalty": 2}
+        ],
+        "test_cases": [
+            {"input": [[1, 2, 2, 3]], "expected_output": [1, 2, 3]},
+            {"input": [[4, 5, 5, 6, 6]], "expected_output": [4, 5, 6]}
+        ]
+    }
+]

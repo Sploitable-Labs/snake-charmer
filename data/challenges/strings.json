@@ -1,0 +1,82 @@
+[
+    {
+        "id": 6,
+        "name": "Reverse String",
+        "category": "Strings",
+        "difficulty": "Medium",
+        "score": 20,
+        "instructions": "Write a function called 'foo' that takes a string and returns the string reversed.",
+        "hints": [
+            {"text": "Use Python slicing with [::-1] to reverse a string.", "penalty": 3},
+            {"text": "You could also use a loop to build the reversed string.", "penalty": 2}
+        ],
+        "test_cases": [
+            {"input": ["hello"], "expected_output": "olleh"},
+            {"input": ["world"], "expected_output": "dlrow"}
+        ]
+    },
+    {
+        "id": 7,
+        "name": "Count Vowels",
+        "category": "Strings",
+        "difficulty": "Medium",
+        "score": 20,
+        "instructions": "Write a function called 'foo' that takes a string and returns the count of vowels.",
+        "hints": [
+            {"text": "Use a loop to go through each character in the string.", "penalty": 3},
+            {"text": "Check if each character is one of 'a', 'e', 'i', 'o', 'u' (case insensitive).", "penalty": 3}
+        ],
+        "test_cases": [
+            {"input": ["hello"], "expected_output": 2},
+            {"input": ["world"], "expected_output": 1}
+        ]
+    },
+    {
+        "id": 11,
+        "name": "Palindrome Checker",
+        "category": "Strings",
+        "difficulty": "Medium",
+        "score": 25,
+        "instructions": "Write a function called 'foo' that checks if a string is a palindrome.",
+        "hints": [
+            {"text": "A palindrome reads the same forwards and backwards.", "penalty": 3},
+            {"text": "Compare the string with its reversed version.", "penalty": 2}
+        ],
+        "test_cases": [
+            {"input": ["radar"], "expected_output": true},
+            {"input": ["hello"], "expected_output": false}
+        ]
+    },
+    {
+        "id": 16,
+        "name": "Check Substring",
+        "category": "Strings",
+        "difficulty": "Medium",
+        "score": 20,
+        "instructions": "Write a function called 'foo' that takes two strings, and returns True if the second string is a substring of the first, otherwise False.",
+        "hints": [
+            {"text": "Use Python's 'in' keyword to check if one string is in another.", "penalty": 3},
+            {"text": "You could also use the find() method for strings.", "penalty": 2}
+        ],
+        "test_cases": [
+            {"input": ["hello world", "world"], "expected_output": true},
+            {"input": ["python", "java"], "expected_output": false}
+        ]
+    },
+    {
+        "id": 21,
+        "name": "Anagram Checker",
+        "category": "Strings",
+        "difficulty": "Hard",
+        "score": 30,
+        "instructions": "Write a function called 'foo' that takes two strings and checks if they are anagrams.",
+        "hints": [
+            {"text": "Two strings are anagrams if they have the same characters in the same frequencies.", "penalty": 4},
+            {"text": "Sort both strings and compare them.", "penalty": 5}
+        ],
+        "test_cases": [
+            {"input": ["listen", "silent"], "expected_output": true},
+            {"input": ["hello", "world"], "expected_output": false}
+        ]
+    }
+]

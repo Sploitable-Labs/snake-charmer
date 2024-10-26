@@ -1,0 +1,114 @@
+[
+    {
+        "id": 25,
+        "name": "Extract Keys",
+        "category": "Dictionaries",
+        "difficulty": "Easy",
+        "score": 10,
+        "instructions": "Write a function called 'foo' that takes a dictionary and returns a list of its keys.",
+        "hints": [
+            {"text": "Use the .keys() method to get all keys in a dictionary.", "penalty": 2},
+            {"text": "Convert the keys view to a list using list().", "penalty": 1}
+        ],
+        "test_cases": [
+            {"input": [{"a": 1, "b": 2, "c": 3}], "expected_output": ["a", "b", "c"]},
+            {"input": [{"x": 5, "y": 10}], "expected_output": ["x", "y"]}
+        ]
+    },
+    {
+        "id": 26,
+        "name": "Sum Dictionary Values",
+        "category": "Dictionaries",
+        "difficulty": "Easy",
+        "score": 15,
+        "instructions": "Write a function called 'foo' that takes a dictionary with numeric values and returns the sum of all values.",
+        "hints": [
+            {"text": "Use the .values() method to access all values in a dictionary.", "penalty": 2},
+            {"text": "Pass the values to the sum() function to get the total.", "penalty": 1}
+        ],
+        "test_cases": [
+            {"input": [{"a": 1, "b": 2, "c": 3}], "expected_output": 6},
+            {"input": [{"x": 10, "y": 20, "z": 30}], "expected_output": 60}
+        ]
+    },
+    {
+        "id": 29,
+        "name": "Dictionary to List of Tuples",
+        "category": "Dictionaries",
+        "difficulty": "Medium",
+        "score": 20,
+        "instructions": "Write a function called 'foo' that takes a dictionary and returns a list of tuples where each tuple is a key-value pair from the dictionary.",
+        "hints": [
+            {"text": "Use the .items() method to get key-value pairs as tuples.", "penalty": 3},
+            {"text": "Convert the result of .items() to a list if needed.", "penalty": 2}
+        ],
+        "test_cases": [
+            {"input": [{"a": 1, "b": 2}], "expected_output": [["a", 1], ["b", 2]]},
+            {"input": [{"x": 5, "y": 10}], "expected_output": [["x", 5], ["y", 10]]}
+        ]
+    },
+    {
+        "id": 31,
+        "name": "Merge Dictionaries",
+        "category": "Dictionaries",
+        "difficulty": "Medium",
+        "score": 25,
+        "instructions": "Write a function called 'foo' that takes two dictionaries and returns a new dictionary containing all key-value pairs from both, with values from the second dictionary overwriting those from the first if keys overlap.",
+        "hints": [
+            {"text": "Use dictionary unpacking (**) to merge dictionaries.", "penalty": 4},
+            {"text": "Alternatively, use dict.update() to merge two dictionaries.", "penalty": 3}
+        ],
+        "test_cases": [
+            {"input": [{"a": 1, "b": 2}, {"b": 3, "c": 4}], "expected_output": {"a": 1, "b": 3, "c": 4}},
+            {"input": [{"x": 10}, {"y": 20, "x": 30}], "expected_output": {"x": 30, "y": 20}}
+        ]
+    },
+    {
+        "id": 34,
+        "name": "Convert Tuples to Dictionary",
+        "category": "Dictionaries",
+        "difficulty": "Medium",
+        "score": 20,
+        "instructions": "Write a function called 'foo' that takes a list of tuples, each containing two elements, and converts it to a dictionary where each tuple's first element is a key and the second is a value.",
+        "hints": [
+            {"text": "Use dict() to convert a list of tuples directly to a dictionary.", "penalty": 3},
+            {"text": "Alternatively, iterate through the list and add each tuple as a key-value pair to the dictionary.", "penalty": 4}
+        ],
+        "test_cases": [
+            {"input": [[["a", 1], ["b", 2]]], "expected_output": {"a": 1, "b": 2}},
+            {"input": [[["x", 10], ["y", 20]]], "expected_output": {"x": 10, "y": 20}}
+        ]
+    },
+    {
+        "id": 27,
+        "name": "Count Characters in String",
+        "category": "Dictionaries",
+        "difficulty": "Medium",
+        "score": 20,
+        "instructions": "Write a function called 'foo' that takes a string and returns a dictionary where the keys are characters and values are the number of times each character appears.",
+        "hints": [
+            {"text": "Loop through each character in the string.", "penalty": 3},
+            {"text": "Use a dictionary to store character counts, initializing each count to 0.", "penalty": 3}
+        ],
+        "test_cases": [
+            {"input": ["hello"], "expected_output": {"h": 1, "e": 1, "l": 2, "o": 1}},
+            {"input": ["test"], "expected_output": {"t": 2, "e": 1, "s": 1}}
+        ]
+    },
+    {
+        "id": 33,
+        "name": "Invert Dictionary",
+        "category": "Dictionaries",
+        "difficulty": "Hard",
+        "score": 30,
+        "instructions": "Write a function called 'foo' that inverts a dictionary by swapping keys and values. Assume all values are unique.",
+        "hints": [
+            {"text": "Use a dictionary comprehension to swap keys and values.", "penalty": 5},
+            {"text": "Remember to handle the inversion in one line if possible.", "penalty": 3}
+        ],
+        "test_cases": [
+            {"input": [{"a": 1, "b": 2}], "expected_output": {"1": "a", "2": "b"}},
+            {"input": [{"x": 10, "y": 20}], "expected_output": {"10": "x", "20": "y"}}
+        ]
+    }
+]

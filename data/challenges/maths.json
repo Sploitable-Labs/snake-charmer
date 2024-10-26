@@ -1,0 +1,100 @@
+[
+    {
+        "id": 1,
+        "name": "Sum of Two Numbers",
+        "category": "Maths",
+        "difficulty": "Easy",
+        "score": 10,
+        "instructions": "Write a function called 'foo' that takes two numbers as arguments and returns their sum.",
+        "hints": [
+            {"text": "Use the + operator to add two numbers.", "penalty": 2},
+            {"text": "Return the result directly after the addition.", "penalty": 1}
+        ],
+        "test_cases": [
+            {"input": [1, 2], "expected_output": 3},
+            {"input": [5, 7], "expected_output": 12}
+        ]
+    },
+    {
+        "id": 13,
+        "name": "Absolute Difference",
+        "category": "Maths",
+        "difficulty": "Easy",
+        "score": 10,
+        "instructions": "Write a function called 'foo' that takes two integers and returns their absolute difference.",
+        "hints": [
+            {"text": "The absolute difference between two numbers can be found by subtracting and taking the absolute value.", "penalty": 2},
+            {"text": "Use Python's built-in abs() function.", "penalty": 1}
+        ],
+        "test_cases": [
+            {"input": [5, 3], "expected_output": 2},
+            {"input": [10, 20], "expected_output": 10}
+        ]
+    },
+    {
+        "id": 17,
+        "name": "Square Root Approximation",
+        "category": "Maths",
+        "difficulty": "Medium",
+        "score": 25,
+        "instructions": "Write a function called 'foo' that takes a number and returns an approximation of its square root using the Babylonian method.",
+        "hints": [
+            {"text": "Start with an initial guess, then iteratively improve it.", "penalty": 5},
+            {"text": "Update the guess using (guess + number / guess) / 2 in each iteration.", "penalty": 5}
+        ],
+        "test_cases": [
+            {"input": [16], "expected_output": 4},
+            {"input": [25], "expected_output": 5}
+        ]
+    },
+    {
+        "id": 22,
+        "name": "Find GCD",
+        "category": "Maths",
+        "difficulty": "Medium",
+        "score": 25,
+        "instructions": "Write a function called 'foo' that takes two integers and returns their Greatest Common Divisor (GCD).",
+        "hints": [
+            {"text": "Try using the Euclidean algorithm for GCD.", "penalty": 5},
+            {"text": "GCD of two numbers can be found by repeatedly subtracting the smaller number from the larger.", "penalty": 5}
+        ],
+        "test_cases": [
+            {"input": [8, 12], "expected_output": 4},
+            {"input": [18, 24], "expected_output": 6}
+        ]
+    },
+    {
+        "id": 23,
+        "name": "Check Perfect Number",
+        "category": "Maths",
+        "difficulty": "Hard",
+        "score": 30,
+        "instructions": "Write a function called 'foo' that checks if a number is a perfect number. A perfect number is equal to the sum of its proper divisors.",
+        "hints": [
+            {"text": "Proper divisors of a number exclude the number itself.", "penalty": 5},
+            {"text": "Use a loop to find divisors and accumulate the sum.", "penalty": 5}
+        ],
+        "test_cases": [
+            {"input": [6], "expected_output": true},
+            {"input": [28], "expected_output": true},
+            {"input": [12], "expected_output": false}
+        ]
+    },
+    {
+        "id": 19,
+        "name": "Check Armstrong Number",
+        "category": "Maths",
+        "difficulty": "Hard",
+        "score": 30,
+        "instructions": "Write a function called 'foo' that checks if a number is an Armstrong number. A number is an Armstrong number if the sum of its own digits each raised to the power of the number of digits is equal to the number itself.",
+        "hints": [
+            {"text": "Convert the number to a string to iterate over each digit.", "penalty": 5},
+            {"text": "Raise each digit to the power of the number of digits.", "penalty": 5}
+        ],
+        "test_cases": [
+            {"input": [153], "expected_output": true},
+            {"input": [9474], "expected_output": true},
+            {"input": [123], "expected_output": false}
+        ]
+    }
+]

@@ -1,11 +1,25 @@
 from flask import Flask, render_template, request, jsonify
 import json
+from glob import glob
+import os
 
 app = Flask(__name__)
 
-# Load challenges data from JSON
-with open('data/challenges.json') as f:
-    challenges = json.load(f)
+challenges = []
+
+def load_all_challenges():
+    global challenges
+    challenges.clear()  # Clear existing data if reloading
+
+    challenges_dir = os.path.join(app.root_path, 'data/challenges')
+    
+    # Load each JSON file in the challenges directory
+    for filepath in glob(os.path.join(challenges_dir, '*.json')):
+        with open(filepath, 'r') as file:
+            data = json.load(file)
+            challenges.extend(data)  # Assuming each JSON file contains a list of challenges
+    
+    return challenges
 
 # Load or initialize user data
 try:
@@ -47,6 +61,7 @@ def run_user_code(code, test_cases):
 @app.route('/')
 def index():
     # Pass the challenges and user data to the frontend
+    challenges = load_all_challenges()
     return render_template('index.html', challenges=challenges, user_data=user_data)
 
 @app.route('/submit', methods=['POST'])
