@@ -206,6 +206,7 @@ header {
     text-align: center;
     height: 400px; 
     width: 100%;
+    position: relative;
 }
 
 .code-editor-container.border {
@@ -216,6 +217,38 @@ header {
     width: 100%;
     height: 100%;
     font-size: 18px;
+}
+
+/* Style for the 'turned-off' look */
+.computer-off {
+    position: relative;
+}
+
+/* Initial turned-off look */
+.computer-off::before {
+    content: "Select a challenge to start";
+    position: absolute;
+    bottom: 2.2rem;
+    font-size: 1.2rem;
+    color: #888;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 10;
+    opacity: 1;
+    pointer-events: none;
+    border-radius: 5px;
+    width: calc(100% - 40px); /* Reduce width by 20px on each side */
+    height: calc(100% - 40px - 0.8rem); /* Extend overlay to include mb-3 margin */
+    border: 2px solid #000000 !important;
+    transition: opacity 1.5s ease; /* Smooth fade-out effect */
+}
+
+/* When the 'turned-off' overlay is removed */
+.computer-on::before {
+    opacity: 0; /* Fade out the overlay */
 }
 
 /* Computer container */
@@ -235,6 +268,7 @@ header {
     width: 100%;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
     position: relative; /* Ensures ::after can be positioned within the frame */
+    box-sizing: border-box; /* Include padding in the width calculation */
 }
 
 /* Green power light at the bottom right */
@@ -267,8 +301,7 @@ header {
     background-color: #333; /* Match frame color */
     height: 20px;
     width: 250px;
-    border-radius: 3px;
-    margin-bottom: 20px auto;
+    border-radius: 7px;
 }
 
 

@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let availableScore = 0;
 
     const challengeButtons = document.querySelectorAll('.challenge-btn');
-
+    
     // Attach event listeners to each challenge button
     document.querySelectorAll('.challenge-btn').forEach(button => {
         button.addEventListener('click', function () {
@@ -29,6 +29,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Add 'challenge-selected' class to make the power light green
             computerFrame.classList.add('challenge-selected');
+
+            // Add the computer-on class to trigger the fade-out effect
+            computerFrame.classList.add('computer-on');
+
+            // Listen for the end of the transition before removing .computer-off
+            computerFrame.addEventListener('transitionend', function handler() {
+                computerFrame.classList.remove('computer-off');
+                computerFrame.removeEventListener('transitionend', handler); // Clean up event listener
+            });
 
             // Remove 'active-challenge' class from all buttons
             challengeButtons.forEach(btn => btn.classList.remove('active-challenge'));
