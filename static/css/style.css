@@ -9,6 +9,12 @@ header {
     text-align: center;
 }
 
+#submit-button-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    margin-top: 30px; /* Add space from elements above */
+}
+
 /* Score Banner Styling with Padding from the Right */
 #score-banner {
     font-size: 1.5rem;
@@ -108,21 +114,6 @@ header {
     margin-left: 5px;
 }
 
-/* Code Editor Styling */
-#code-editor-container {
-    background-color: #e0e0e0;
-    border-radius: 5px;
-    text-align: center;
-    
-}
-
-#code-editor {
-    width: 100%;
-    height: 100%;
-    font-size: 18px;
-    color: #dcdcdc;
-}
-
 /* Instructions Section Styling - Left Aligned */
 .instructions-box {
     background-color: #d2e3f8;
@@ -194,12 +185,30 @@ header {
     background-color: #f4f4f9;
 }
 
+/* Code Editor Styling */
+.code-editor-container {
+    background-color: #000000;
+    border-radius: 5px;
+    text-align: center;
+    height: 400px; 
+    width: 100%;
+}
+
+.code-editor-container.border {
+    border: 2px solid #6e706e !important; /* Replace #4caf50 with your desired color */
+}
+
+#code-editor {
+    width: 100%;
+    height: 100%;
+    font-size: 18px;
+}
+
 /* Computer container */
 .computer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 20px auto;
     width: 80%; /* Adjust as needed */
     max-width: 70%;
 }
@@ -222,8 +231,28 @@ header {
     right: 15px; /* Position slightly from the right edge */
     width: 10px;
     height: 10px;
-    background-color: #0f0; /* Green color for power light */
-    border-radius: 50%; /* Make it circular */
-    box-shadow: 0 0 8px rgba(0, 255, 0, 0.7); /* Glow effect */
+    background-color: #f00; /* Red color initially */
+    border-radius: 50%; /* Circular shape */
 }
 
+/* Add a "challenge-selected" class to switch to green */
+.computer-frame.challenge-selected::after {
+    background-color: #0f0; /* Green color */
+    box-shadow: 0 0 8px rgba(0, 255, 0, 0.7); /* Green glow effect */
+}
+
+.computer-base-upper {
+    position: relative;
+    background-color: #292929; /* Overall frame color */
+    padding: 10px;
+    width: 50px;
+}
+
+/* Base stand for the computer */
+.computer-base-lower {
+    background-color: #333; /* Match frame color */
+    height: 20px;
+    width: 250px;
+    border-radius: 3px;
+    margin-bottom: 20px auto;
+}

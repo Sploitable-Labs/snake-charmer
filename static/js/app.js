@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const hintContent = document.getElementById('hint-content');
     const hintsHeader = document.getElementById('hints-header');
 
+    const computerFrame = document.querySelector('.computer-frame');
+
     let currentChallenge = null;
     let availableScore = 0;
 
@@ -24,6 +26,9 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.challenge-btn').forEach(button => {
         button.addEventListener('click', function () {
             console.log("Challenge button clicked:", this.dataset.id);
+
+            // Add 'challenge-selected' class to make the power light green
+            computerFrame.classList.add('challenge-selected');
 
             // Remove 'active-challenge' class from all buttons
             challengeButtons.forEach(btn => btn.classList.remove('active-challenge'));

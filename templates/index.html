@@ -51,21 +51,17 @@
             <main class="col-md-6 col-lg-8 d-flex flex-column align-items-center p-4">
                 <!-- Centered Challenge Title -->
                 <h2 id="challenge-title" class="text-center mb-3">Select a challenge to get started</h2>
-                
 
                 <div class="computer">
                     <div class="computer-frame">
                         <!-- Centered Code Editor -->
-                        <div id="code-editor-container" class="border rounded mb-3" style="height: 400px; width: 100%;">
+                        <div id="code-editor-container" class="code-editor-container border rounded mb-3">
                             <div id="code-editor"></div>
                         </div>
                     </div>
-                    <div class="computer-base"></div>
-                </div>
-
-                
-                <!-- Centered Submit Button -->
-                <button id="submit-btn" class="btn btn-success mb-3" disabled><i class="fas fa-check"></i> Submit Code</button>
+                    <div class="computer-base-upper"></div>
+                    <div class="computer-base-lower"></div>
+                </div>               
 
                 <!-- Instructions Section under Submit Button -->
                 <div id="instructions-content" class="instructions-box">
@@ -85,6 +81,11 @@
                 <h4 class="mt-3" id="hints-header" style="display: none;">Hints</h4>
                 <div id="hint-buttons"></div>
                 <div id="hint-content" class="mt-3"></div>
+
+                <!-- Centered Submit Button -->
+                <div id="submit-button-container">
+                    <button id="submit-btn" class="btn btn-success mb-3" disabled><i class="fas fa-check"></i> Submit Code</button>
+                </div>
             </div>
         </div>
     </div>
