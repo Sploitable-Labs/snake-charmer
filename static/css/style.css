@@ -141,9 +141,17 @@ header {
     color: gold; /* Optional: change color to make it stand out */
 }
 
+.challenge-menu {
+    max-height: calc(100vh - 150px);; /* Set a fixed height for the scroll area */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 0px solid #ddd; /* Optional: Add a border for visual separation */
+    padding: 15px;
+}
+
 #hint-panel {
     padding: 15px;
-    border-left: 1px solid #ccc;
+    padding-right: 30px;
+    border-left: 0px solid #ccc;
 }
 
 #available-score {
@@ -184,14 +192,6 @@ header {
     text-decoration: underline; /* Optional: underline on hover for clarity */
 }
 
-.challenge-menu {
-    max-height: calc(100vh - 150px);; /* Set a fixed height for the scroll area */
-    overflow-y: auto; /* Enable vertical scrolling */
-    border: 1px solid #ddd; /* Optional: Add a border for visual separation */
-    padding: 15px;
-    background-color: #f4f4f9;
-}
-
 /* Code Editor Styling */
 .code-editor-container {
     background-color: #000000;
@@ -216,8 +216,8 @@ header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 80%; /* Adjust as needed */
-    max-width: 70%;
+    width: 90%; /* Adjust as needed */
+    max-width: 100%;
 }
 
 /* Frame surrounding the editor to look like a screen */
