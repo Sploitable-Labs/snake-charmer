@@ -146,6 +146,13 @@ header {
     overflow-y: auto; /* Enable vertical scrolling */
     border: 0px solid #ddd; /* Optional: Add a border for visual separation */
     padding: 15px;
+    background-color: rgb(204, 239, 239);
+}
+
+#challenge-menu-outer {
+    background-color: rgba(0, 0, 0, 0.0);
+
+    padding: 10px;
 }
 
 #hint-panel {

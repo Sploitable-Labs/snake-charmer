@@ -27,7 +27,8 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Collapsible Challenge Selection Menu -->
-            <aside id="challenge-menu" class="col-md-3 col-lg-3 bg-light pt-3 challenge-menu">
+            <div id="challenge-menu-outer" class="col-md-3 col-lg-3"    >
+            <aside id="challenge-menu" class="challenge-menu">
                 {% for category in challenges | groupby("category") %}
                 <div class="category">
                     <button class="category-title" data-bs-toggle="collapse" data-bs-target="#cat-{{ loop.index }}" aria-expanded="false" aria-controls="cat-{{ loop.index }}">
@@ -46,6 +47,7 @@
                 </div>
                 {% endfor %}
             </aside>
+            </div>
 
             <!-- Center Column: Code Editor and Submit Button -->
             <main class="col-md-6 col-lg-6 d-flex flex-column align-items-center p-4">
@@ -65,7 +67,7 @@
             </main>
 
             <!-- Right-Side Panel for Available Score and Hints -->
-            <div id="hint-panel" class="col-md-3 col-lg-3 bg-light pt-3">
+            <div id="hint-panel" class="col-md-3 col-lg-3 pt-3">
                 <h4 class="mt-3">Available Score</h4>
                 <div id="available-score">0</div>
 
