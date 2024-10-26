@@ -151,7 +151,6 @@ header {
 
 #challenge-menu-outer {
     background-color: rgba(0, 0, 0, 0.0);
-
     padding: 10px;
 }
 
@@ -168,9 +167,24 @@ header {
 }
 
 .hint-btn {
+    background-color: #17A2B8;
     width: 100%;
-    margin-top: 5px;
+    margin: 5px;
+    color: #fff;
+    border-style: solid;
+    border-color: #17A2B8 !important;
+    border-width: 2px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
+
+.hint-btn:hover {
+    background-color: #138496; /* Darken on hover */
+}
+
 
 /* Footer Styling */
 .footer {
