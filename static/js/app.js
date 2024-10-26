@@ -18,11 +18,18 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentChallenge = null;
     let availableScore = 0;
 
+    const challengeButtons = document.querySelectorAll('.challenge-btn');
+
     // Attach event listeners to each challenge button
     document.querySelectorAll('.challenge-btn').forEach(button => {
         button.addEventListener('click', function () {
             console.log("Challenge button clicked:", this.dataset.id);
 
+            // Remove 'active-challenge' class from all buttons
+            challengeButtons.forEach(btn => btn.classList.remove('active-challenge'));
+
+            // Add 'active-challenge' class to the clicked button
+            this.classList.add('active-challenge');
 
             editor.setReadOnly(false);
             submitButton.removeAttribute('disabled');

@@ -11,4 +11,11 @@ def FizzBuzz(n):
             ans.append(num)
     return ans
 
-print(FizzBuzz(20))
+#print(FizzBuzz(20))
+
+
+
+def abs_test(a,b):
+    return abs(a-b)
+
+print(abs_test(-1, 4))

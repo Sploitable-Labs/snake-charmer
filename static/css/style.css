@@ -93,7 +93,8 @@ header {
 
 /* Styling for Active Challenge */
 .active-challenge {
-    background-color: #fdfd96; /* Light yellow for active */
+    border-color: #007bff;
+    border-width: 2px;
 }
 
 /* Styling for Completed Challenges */
