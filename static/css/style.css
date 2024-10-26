@@ -9,6 +9,25 @@ header {
     text-align: center;
 }
 
+/* Style for settings icon */
+.settings-icon {
+    font-size: 1.5rem;
+    color: #bcbbbb;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+/* Spin animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.settings-icon:hover {
+    color: #6b6b6b; /* Darken on hover */
+    animation: spin 0.6s ease-in-out; /* Spin animation */
+}
+
 #submit-button-container {
     display: flex;
     justify-content: center; /* Center horizontally */

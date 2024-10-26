@@ -9,6 +9,26 @@ document.addEventListener('DOMContentLoaded', function () {
     editor.renderer.setPadding(10);
     editor.setReadOnly(true);
 
+    // Initialize settings modal
+    document.getElementById('settings-icon').addEventListener('click', () => {
+        const settingsModal = new bootstrap.Modal(document.getElementById('settings-modal'));
+        settingsModal.show();
+    });
+
+    // Apply settings to the editor
+    document.getElementById('apply-settings').addEventListener('click', () => {
+        const theme = document.getElementById('theme-select').value;
+        const fontSize = document.getElementById('font-size-input').value;
+        
+        // Assuming `editor` is your Ace editor instance
+        editor.setTheme(`ace/theme/${theme}`);
+        editor.setFontSize(`${fontSize}px`);
+
+        // Close the modal after applying settings
+        const settingsModal = bootstrap.Modal.getInstance(document.getElementById('settings-modal'));
+        settingsModal.hide();
+    });
+
     const submitButton = document.getElementById('submit-btn');
     const availableScoreElement = document.getElementById('available-score');
     const hintButtonsContainer = document.getElementById('hint-buttons');
