@@ -72,8 +72,8 @@ header {
     color: #333;
     text-decoration: none;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    border: 0px;
+    border-radius: 10px;
     background-color: #e0e0e0;
     text-align: left;
     cursor: pointer;
@@ -84,17 +84,24 @@ header {
     background-color: #d4edda; /* Light green */
 }
 
+.challenge-easy:hover {
+    background-color: #74dd8d; /* darker green */
+}
+
 .challenge-medium {
     background-color: #ffeeba; /* Light yellow */
+}
+
+.challenge-medium:hover {
+    background-color: #f4d67c; /* darker yellow */
 }
 
 .challenge-hard {
     background-color: #f8d7da; /* Light red */
 }
 
-/* Hover Effect for Uncompleted Challenges */
-.challenge-btn:hover {
-    background-color: #d3d3d3;
+.challenge-hard:hover {
+    background-color: #f48891; /* darker red */
 }
 
 /* Styling for Active Challenge */
