@@ -147,3 +147,21 @@ document.addEventListener('DOMContentLoaded', function () {
         new bootstrap.Modal(document.getElementById('notificationModal')).show();
     }
 });
+
+document.addEventListener('keydown', function(event) {
+    // Find the key on the screen using the key code class (e.g., "c13" for Enter)
+    const keyElement = document.querySelector(`.c${event.keyCode}`);
+
+    if (keyElement) {
+        // Add the highlight class to the key
+        keyElement.classList.add('highlighted');
+    }
+});
+
+document.addEventListener('keyup', function(event) {
+    // Remove the highlight when the key is released
+    const keyElement = document.querySelector(`.c${event.keyCode}`);
+    if (keyElement) {
+        keyElement.classList.remove('highlighted');
+    }
+});
