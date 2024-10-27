@@ -258,7 +258,9 @@ header {
 }
 
 .output-area {
-    border: 2px solid #6e706e !important;
+    border-left: 2px solid #6e706e !important;
+    border-right: 2px solid #6e706e !important;
+    border-bottom: 2px solid #6e706e !important;
     padding: 15px;
     background-color: #1a1a1a;  /* Dark background for terminal effect */
     color: #33ff33;             /* Bright green text for terminal effect */
