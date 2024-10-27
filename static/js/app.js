@@ -98,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         console.log(isChallengeCompleted(currentChallenge.id));
                         if(isChallengeCompleted(currentChallenge.id)){
                             hintButton.disabled = true;
+                            submitButton.disabled = true;
                         }
                         console.log(hintButton);
 
