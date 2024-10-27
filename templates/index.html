@@ -296,6 +296,13 @@ def fetch_arguments(callback):
     req.bind('load', lambda _: on_complete(req))
     req.send()
 
+def is_iterable(obj):
+    try:
+        iter(obj)  # Attempt to get an iterator from the object
+        return True
+    except TypeError:  # If it raises TypeError, it's not iterable
+        return False
+
 # Function to run user code with fetched arguments
 def run_user_code(event):
     challenge_id = window.challenge_id
@@ -309,13 +316,26 @@ def run_user_code(event):
     local_scope = {}
 
     def execute_with_arguments(arguments):
+
+        # This block maps js objects to python dictionaries
+        darguments = []
+        for idx in range(len(arguments)):
+            arg = arguments[idx][0]
+
+            if is_iterable(arg) and not isinstance(arg, str):
+                darg = dict(arg)
+            else:
+                darg = arg
+
+            darguments.append(darg)
+
         try:
             exec(user_code, {}, local_scope)
             if 'foo' in local_scope:
                 foo = local_scope['foo']
                 output_area.text = ""
-                for args in arguments:
-                    result = foo(*args)
+                for args in darguments:         
+                    result = foo(args)
                     output_area.text += str(result) + "\n"
                     results.append(result)
                 submit_results(results)

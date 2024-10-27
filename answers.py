@@ -15,3 +15,7 @@ def foo(n):
 # OddEven
 def foo(x):
     return 'Even' if x % 2 == 0 else 'Odd'
+
+#ExtractKeys
+def foo(x):
+    return [key for key, val in x.items()]
