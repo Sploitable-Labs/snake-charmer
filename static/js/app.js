@@ -58,6 +58,12 @@ document.addEventListener('DOMContentLoaded', function () {
             // Load challenge details
             const challengeId = parseInt(this.dataset.id);
 
+            // Clear the output area by setting its innerHTML to an empty string
+            const outputArea = document.getElementById("output");
+            if (outputArea) {
+                outputArea.innerHTML = "";  // Clear the output area
+            }
+
             // Update the Brython `challenge_id` variable using `window`
             window.challenge_id = parseInt(challengeId);  // Setting globally for Brython
 
