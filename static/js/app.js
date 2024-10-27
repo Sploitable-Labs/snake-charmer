@@ -97,12 +97,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         });
 
                         hintButtonsContainer.appendChild(hintButton);
-
-                        // Create a placeholder for hint text display
-                        const hintText = document.createElement('p');
-                        hintText.id = `hint-${i}-text`;
-                        hintText.classList.add('hint-text');
-                        hintButtonsContainer.appendChild(hintText);
                     }
                 } else {
                     hintsHeader.style.display = 'none';
@@ -132,14 +126,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Function to reveal a hint and apply penalty
-    function revealHint(index, penalty, text) {
-        availableScore = Math.max(0, availableScore - penalty);
-        updateAvailableScore();
-        hintContent.innerHTML += `<p>${text}</p>`;
-        document.querySelector(`.hint-btn[data-hint-index="${index}"]`).disabled = true;
-    }
-
     function updateAvailableScore() {
         availableScoreElement.textContent = availableScore;
     }
@@ -155,40 +141,41 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('modal-icon').className = iconClass;
         new bootstrap.Modal(document.getElementById('notificationModal')).show();
     }
-});
 
-document.addEventListener('keydown', function(event) {
-    // Find the key on the screen using the key code class (e.g., "c13" for Enter)
-    const keyElement = document.querySelector(`.c${event.keyCode}`);
-
-    if (keyElement) {
-        // Add the highlight class to the key
-        keyElement.classList.add('highlighted');
-    }
-});
-
-document.addEventListener('keyup', function(event) {
-    // Remove the highlight when the key is released
-    const keyElement = document.querySelector(`.c${event.keyCode}`);
-    if (keyElement) {
-        keyElement.classList.remove('highlighted');
-    }
-});
-
-// Function to request a hint from the server
-function requestHint(challengeId, hintIndex) {
-    fetch('/get_hint', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ challenge_id: challengeId, hint_index: hintIndex })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.hint_text) {
-            document.getElementById(`hint-${hintIndex}-text`).textContent = data.hint_text;
-        } else {
-            alert("Error: " + data.error);
+    document.addEventListener('keydown', function(event) {
+        // Find the key on the screen using the key code class (e.g., "c13" for Enter)
+        const keyElement = document.querySelector(`.c${event.keyCode}`);
+    
+        if (keyElement) {
+            // Add the highlight class to the key
+            keyElement.classList.add('highlighted');
         }
-    })
-    .catch(error => console.error("Error fetching hint:", error));
-}
+    });
+    
+    document.addEventListener('keyup', function(event) {
+        // Remove the highlight when the key is released
+        const keyElement = document.querySelector(`.c${event.keyCode}`);
+        if (keyElement) {
+            keyElement.classList.remove('highlighted');
+        }
+    });
+    
+    // Function to request a hint from the server
+    function requestHint(challengeId, hintIndex) {
+        fetch('/get_hint', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ challenge_id: challengeId, hint_index: hintIndex })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.hint_text) {
+                hintContent.innerHTML += `<p>${data.hint_text}</p>`;
+            } else {
+                alert("Error: " + data.error);
+            }
+        })
+        .catch(error => console.error("Error fetching hint:", error));
+    }
+});
+
