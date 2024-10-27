@@ -3,6 +3,11 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
+/* Treat \n in output box as expected */
+.output-area {
+    white-space: pre;
+}
+
 /* Header Styling */
 header {
     font-size: 1.5rem;

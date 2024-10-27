@@ -315,8 +315,11 @@ def run_user_code(event):
             exec(user_code, {}, local_scope)
             if 'foo' in local_scope:
                 foo = local_scope['foo']
+                output_area.text = ""
                 for args in arguments:
-                    results.append(foo(*args))
+                    result = foo(*args)
+                    output_area.text += str(result) + "\n"
+                    results.append(result)
                 submit_results(results)
             else:
                 output_area.text = "Error: Function 'foo' not found in code."
@@ -353,6 +356,17 @@ def submit_results(results):
 
                 # Reset available score to zero in the DOM
                 document["available-score"].text = "0"
+
+                # Disable the submit button
+                document["submit-btn"].disabled = True
+
+                # Select all elements with the class "hint-btn"
+                hint_buttons = document.select(".hint-btn")
+
+                # Loop through each button and set disabled to True
+                for button in hint_buttons:
+                    button.disabled = True
+
             else:
                 failure_messages = [
                     "Oops! Better luck next time.",
