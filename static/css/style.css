@@ -261,10 +261,11 @@ header {
     border-left: 2px solid #6e706e !important;
     border-right: 2px solid #6e706e !important;
     border-bottom: 2px solid #6e706e !important;
-    padding: 15px;
+    padding: 4px;
     background-color: #1a1a1a;  /* Dark background for terminal effect */
     color: #33ff33;             /* Bright green text for terminal effect */
     font-family: "Courier New", Courier, monospace; /* Monospace font for terminal style */
+    font-size: 10pt;
     border-radius: 5px;
     box-shadow: inset 0px 0px 10px #000000; /* Slight inner shadow for depth */
     white-space: pre-wrap; /* Keeps line breaks */
