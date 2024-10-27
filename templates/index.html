@@ -46,7 +46,7 @@
                         {% for challenge in category.list %}
                         <button class="challenge-btn challenge-{{ challenge.difficulty | lower }}" data-id="{{ challenge.id }}">
                             <span id="challenge-name-{{ challenge.id }}">{{ challenge.name }}</span>
-                            {% if challenge.id in user_data.completed_challenges %}
+                            {% if challenge.id|string in user_data.completed_challenges %}
                             <i class="fas fa-check-circle tick-mark"></i>
                             {% endif %}
                         </button>
