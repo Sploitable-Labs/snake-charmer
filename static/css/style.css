@@ -258,6 +258,7 @@ header {
 }
 
 .output-area {
+    border: 2px solid #6e706e !important;
     padding: 15px;
     background-color: #1a1a1a;  /* Dark background for terminal effect */
     color: #33ff33;             /* Bright green text for terminal effect */
@@ -269,6 +270,7 @@ header {
     height: 80px;         /* Limit height */
     max-height: 80px;     /* Limit height */
     text-shadow: 0px 0px 5px #33ff33; /* Subtle glow effect */
+    margin-bottom: 15px;
 }
 
 /* Style for the 'turned-off' look */
@@ -579,6 +581,10 @@ ul, ol {padding: 0px; margin: 0;}
     transition: background-color 0.4s fade;
 }
 
-.code-editor-container, .output-area {
-    margin: 0 !important;
+.code-editor-container {
+    margin-bottom: 0 !important;
+}
+
+.output-area {
+    margin-top: 0 !important;
 }
