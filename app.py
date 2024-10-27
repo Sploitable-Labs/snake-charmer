@@ -143,7 +143,7 @@ def get_hint():
     hint_index = data.get("hint_index")
 
     # Validate challenge and hint index
-    challenge = challenges[challenge_id]
+    challenge = challenges[challenge_id - 1]
     if not challenge or hint_index >= len(challenge["hints"]):
         return jsonify({"error": "Invalid challenge or hint index"}), 400
 

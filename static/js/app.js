@@ -92,6 +92,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         // Attach click event to request the hint from the server
                         hintButton.addEventListener('click', () => {
                             requestHint(challengeId, i);  // Fetch hint text from the server
+                            // Disable the button after it's clicked
+                            hintButton.disabled = true;
                         });
 
                         hintButtonsContainer.appendChild(hintButton);
