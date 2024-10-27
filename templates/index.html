@@ -342,7 +342,27 @@ def submit_results(results):
 
 # Function to display response message
 def display_message(response):
-    document["output"].text = response.get("message", "No response message")
+    # Access properties directly instead of using .get()
+    message = response.message if hasattr(response, "message") else "No response message"
+    passed_tests = response.passed_tests if hasattr(response, "passed_tests") else 0
+    total_tests = response.total_tests if hasattr(response, "total_tests") else 0
+    score = response.score if hasattr(response, "score") else 0
+
+    # Log the full response for debugging purposes
+    console.log("Response from server:", response)
+
+    # Display message in the output area
+    document["output"].text = message
+
+    # Update the score in the score banner
+    document["score"].text = str(score)
+
+    # Optionally, update additional UI elements with test results
+    if passed_tests == total_tests:
+        document["output"].text += f"\n🎉 All {total_tests} tests passed!"
+    else:
+        document["output"].text += f"\n{passed_tests}/{total_tests} tests passed. Keep trying!"
+
 
 # Attach run_user_code to submit button
 document["submit-btn"].bind("click", run_user_code)
