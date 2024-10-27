@@ -9,7 +9,7 @@ def foo(n):
         elif num % 5 == 0:
             ans.append("Buzz")
         else:
-            ans.append(num)
+            ans.append(str(num))
     return ans
 
 # OddEven

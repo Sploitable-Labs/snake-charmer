@@ -65,9 +65,6 @@ def submit_result():
     # Find the challenge by ID to access expected outputs
     challenge = next((c for c in challenges if c['id'] == int(challenge_id)), None)
 
-    print(f"Challenge ID: {challenge_id}")
-    print(f"c: {challenge}")
-
     if not challenge:
         return jsonify({"success": False, "message": "Challenge not found."})
 
