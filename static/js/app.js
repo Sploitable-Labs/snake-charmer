@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
     const editor = ace.edit("code-editor");
+    window.editor = editor;  // Make the editor accessible globally
     editor.setTheme("ace/theme/solarized_dark");
     editor.session.setMode("ace/mode/python");
-
     editor.setOption("highlightActiveLine", true);
     editor.setOption("vScrollBarAlwaysVisible", true);
     editor.setFontSize(20);
@@ -19,8 +19,6 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('apply-settings').addEventListener('click', () => {
         const theme = document.getElementById('theme-select').value;
         const fontSize = document.getElementById('font-size-input').value;
-        
-        // Assuming `editor` is your Ace editor instance
         editor.setTheme(`ace/theme/${theme}`);
         editor.setFontSize(`${fontSize}px`);
 
@@ -34,55 +32,40 @@ document.addEventListener('DOMContentLoaded', function () {
     const hintButtonsContainer = document.getElementById('hint-buttons');
     const hintContent = document.getElementById('hint-content');
     const hintsHeader = document.getElementById('hints-header');
-
     const computerFrame = document.querySelector('.computer-frame');
 
     let currentChallenge = null;
     let availableScore = 0;
 
     const challengeButtons = document.querySelectorAll('.challenge-btn');
-    
+
     // Attach event listeners to each challenge button
-    document.querySelectorAll('.challenge-btn').forEach(button => {
-        button.addEventListener('click', function () {
+    challengeButtons.forEach(button => {
+        button.addEventListener('click', async function () {
             console.log("Challenge button clicked:", this.dataset.id);
 
-            // Add 'challenge-selected' class to make the power light green
-            computerFrame.classList.add('challenge-selected');
-
-            // Add the computer-on class to trigger the fade-out effect
-            computerFrame.classList.add('computer-on');
-
-            // Listen for the end of the transition before removing .computer-off
-            computerFrame.addEventListener('transitionend', function handler() {
-                computerFrame.classList.remove('computer-off');
-                computerFrame.removeEventListener('transitionend', handler); // Clean up event listener
-            });
-
-            // Remove 'active-challenge' class from all buttons
-            challengeButtons.forEach(btn => btn.classList.remove('active-challenge'));
-
-            // Add 'active-challenge' class to the clicked button
-            this.classList.add('active-challenge');
-
+            // Add visual indicators and setup editor
+            computerFrame.classList.add('challenge-selected', 'computer-on');
             editor.setReadOnly(false);
             submitButton.removeAttribute('disabled');
-  
-            const challengeId = parseInt(this.dataset.id);
-            currentChallenge = challengeData.find(c => c.id === challengeId);
 
+            // Load challenge details
+            const challengeId = parseInt(this.dataset.id);
+
+            // Update the Brython `challenge_id` variable using `window`
+            window.challenge_id = parseInt(challengeId);  // Setting globally for Brython
+
+            currentChallenge = challengeData.find(c => c.id === challengeId);
             if (currentChallenge) {
-                console.log("Challenge found:", currentChallenge);
                 document.getElementById('challenge-title').textContent = currentChallenge.name;
                 document.getElementById('instructions-text').innerHTML = `<p>${currentChallenge.instructions}</p>`;
-
                 availableScore = currentChallenge.score;
                 updateAvailableScore();
-
-                // Generate hints based on the current challenge's hints
                 resetHints();
-                if (currentChallenge.hints && currentChallenge.hints.length > 0) {
-                    hintsHeader.style.display = 'block'; // Show the hints header
+
+                // Display hints if available
+                if (currentChallenge.hints?.length > 0) {
+                    hintsHeader.style.display = 'block';
                     currentChallenge.hints.forEach((hint, index) => {
                         const hintButton = document.createElement('button');
                         hintButton.classList.add('btn', 'btn-outline-secondary', 'hint-btn');
@@ -92,35 +75,48 @@ document.addEventListener('DOMContentLoaded', function () {
                         hintButtonsContainer.appendChild(hintButton);
                     });
                 } else {
-                    hintsHeader.style.display = 'none'; // Hide the hints header if no hints
+                    hintsHeader.style.display = 'none';
                 }
+
+                // Fetch and run test arguments
+                fetchTestArguments(challengeId);
             } else {
                 console.error("Challenge not found:", challengeId);
             }
         });
     });
 
+    // Function to fetch test arguments for the selected challenge
+    async function fetchTestArguments(challengeId) {
+        try {
+            const response = await fetch(`/get_test_arguments?challenge_id=${challengeId}`);
+            const data = await response.json();
+            if (data.success) {
+                console.log("Test arguments:", data.test_arguments);
+                window.testArguments = data.test_arguments;
+            } else {
+                console.error("Failed to load test arguments.");
+            }
+        } catch (error) {
+            console.error("Error fetching test arguments:", error);
+        }
+    }
+
     // Function to reveal a hint and apply penalty
     function revealHint(index, penalty, text) {
-        availableScore = Math.max(0, availableScore - penalty); // Deduct score but keep non-negative
+        availableScore = Math.max(0, availableScore - penalty);
         updateAvailableScore();
-
-        // Display the hint text in the hint content section
         hintContent.innerHTML += `<p>${text}</p>`;
-
-        // Disable the hint button after revealing
         document.querySelector(`.hint-btn[data-hint-index="${index}"]`).disabled = true;
     }
 
-    // Function to update the available score display
     function updateAvailableScore() {
         availableScoreElement.textContent = availableScore;
     }
 
-    // Function to reset hints and re-enable hint buttons for a new challenge
     function resetHints() {
         hintContent.innerHTML = "";
-        hintButtonsContainer.innerHTML = ""; // Clear previous hint buttons
+        hintButtonsContainer.innerHTML = "";
     }
 
     submitButton.addEventListener('click', () => {
@@ -134,63 +130,60 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const challengeId = activeChallenge.dataset.id;
 
-        fetch('/submit', {
+        // Execute the user code with Brython
+        executeUserCode(code, window.testArguments, challengeId);
+    });
+
+    function executeUserCode(code, testArguments, challengeId) {
+        const localScope = {};
+        const results = [];
+
+        try {
+            // Execute the user's code in an isolated scope
+            exec(code, {}, localScope);
+
+            // Check if the function 'foo' exists and execute it with each argument set
+            if ('foo' in localScope) {
+                const foo = localScope['foo'];
+                testArguments.forEach(args => results.push(foo(...args)));
+                submitResults(challengeId, results);
+            } else {
+                showModal("Error", "Function 'foo' is not defined.", "fas fa-exclamation-circle text-danger");
+            }
+        } catch (error) {
+            console.error("Error executing code:", error);
+            showModal("Error", "An error occurred while running your code.", "fas fa-exclamation-circle text-danger");
+        }
+    }
+
+    // Submit the list of results back to the server for validation
+    function submitResults(challengeId, results) {
+        fetch('/submit_result', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `code=${encodeURIComponent(code)}&challenge_id=${challengeId}&available_score=${availableScore}`
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ challenge_id: challengeId, results: results })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                showModal("Congratulations!", `Challenge completed! You earned ${data.challenge_score} points.`, "fas fa-trophy text-success");
-
-                if (!activeChallenge.querySelector('.tick-mark')) {
-                    activeChallenge.innerHTML += ' <i class="fas fa-check-circle tick-mark"></i>';
-                }
-
+                showModal("Congratulations!", `${data.message} You earned ${availableScore} points.`, "fas fa-trophy text-success");
                 document.getElementById('score').textContent = data.score;
-
                 availableScore = 0;
                 updateAvailableScore();
             } else {
-                const failureMessages = [
-                    "Oops! Better luck next time.",
-                    "Close, but not quite!",
-                    "Almost there! Keep trying!",
-                    "Hmm... something went awry!"
-                ];
-                const randomMessage = failureMessages[Math.floor(Math.random() * failureMessages.length)];
-                showModal("Try Again!", randomMessage, "fas fa-times-circle text-danger");
+                showModal("Try Again!", data.message, "fas fa-times-circle text-danger");
             }
         })
         .catch(error => {
-            console.error("Error submitting code:", error);
-            showModal("Error", "An error occurred while submitting the code.", "fas fa-exclamation-triangle text-warning");
+            console.error("Error submitting results:", error);
+            showModal("Error", "An error occurred while submitting results.", "fas fa-exclamation-triangle text-warning");
         });
-    });
+    }
 
     function showModal(title, message, iconClass) {
         document.getElementById('notificationModalLabel').textContent = title;
         document.getElementById('modal-message').textContent = message;
         document.getElementById('modal-icon').className = iconClass;
         new bootstrap.Modal(document.getElementById('notificationModal')).show();
-    }
-});
-
-document.addEventListener('keydown', function(event) {
-    // Find the key on the screen using the key code class (e.g., "c13" for Enter)
-    const keyElement = document.querySelector(`.c${event.keyCode}`);
-
-    if (keyElement) {
-        // Add the highlight class to the key
-        keyElement.classList.add('highlighted');
-    }
-});
-
-document.addEventListener('keyup', function(event) {
-    // Remove the highlight when the key is released
-    const keyElement = document.querySelector(`.c${event.keyCode}`);
-    if (keyElement) {
-        keyElement.classList.remove('highlighted');
     }
 });

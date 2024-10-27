@@ -1,4 +1,5 @@
-def FizzBuzz(n):
+# FizzBuzz
+def foo(n):
     ans = []
     for num in range(1,n+1):
         if num % 5 == 0 and num % 3 == 0:
@@ -11,5 +12,6 @@ def FizzBuzz(n):
             ans.append(num)
     return ans
 
-def OddEven(x):
+# OddEven
+def foo(x):
     return 'Even' if x % 2 == 0 else 'Odd'

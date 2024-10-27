@@ -14,8 +14,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <!-- Ace Editor -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+    <!-- Brython -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.10.3/brython.min.js"></script>
 </head>
-<body>
+<body onload="brython()">
     <header class="bg-dark text-white py-3 d-flex justify-content-center align-items-center position-relative">
         <!-- Settings gear positioned on top-left with padding -->
         <div id="settings-banner" class="position-absolute" style="left: 2rem;">
@@ -193,6 +195,11 @@
                 <div id="submit-button-container">
                     <button id="submit-btn" class="btn btn-success mb-3" disabled><i class="fas fa-check"></i> Submit Code</button>
                 </div>
+
+                <h4 class="mt-3" id="output-header">Output</h4>
+                <div id="output" class="output-area mt-3">
+                    <p>Output will appear here...</p>
+                </div>
             </div>
         </div>
     </div>
@@ -255,6 +262,105 @@
             </div>
         </div>
     </div>
+
+ <script type="text/python">
+from browser import document, console, window
+
+# Function to fetch arguments from the server
+def fetch_arguments(callback):
+    challenge_id = window.challenge_id
+
+    if not challenge_id:
+        console.log("No challenge selected.")
+        return
+
+    def on_complete(req):
+        try:
+            # Parse JSON response using responseText
+            response_data = window.JSON.parse(req.responseText)
+            console.log("Response Data:", response_data)
+
+            # Check if success exists and is True
+            if response_data["success"]:
+                # Extract `test_arguments` from response data
+                test_arguments = response_data["test_arguments"]
+                console.log("Test Arguments:", test_arguments)
+                
+                # Call the callback with `test_arguments`
+                callback(test_arguments)
+            else:
+                console.log("Error: Failed to fetch arguments.")
+        except Exception as e:
+            console.log("Error processing response:", str(e))
+
+    # AJAX request setup
+    req = window.XMLHttpRequest.new()
+    req.open('GET', f'/get_test_arguments?challenge_id={challenge_id}', True)
+    req.bind('load', lambda _: on_complete(req))
+    req.send()
+
+
+
+# Function to run user code with fetched arguments
+def run_user_code(event):
+    user_code = window.editor.getValue()
+    output_area = document["output"]
+    results = []
+    local_scope = {}
+
+    # Execute user code with fetched arguments
+    def execute_with_arguments(arguments):
+        try:
+            exec(user_code, {}, local_scope)
+
+            if 'foo' in local_scope:
+                foo = local_scope['foo']
+                print(f"arguments {arguments}")
+                for args in arguments:
+                    result = foo(*args)
+                    print(f"result {result}")
+                    results.append(result)
+                print(f"results {results}")
+                submit_results(results)
+            else:
+                output_area.text = "Error: Function 'foo' not found in code."
+        except Exception as e:
+            output_area.text = f"Error: {str(e)}"
+
+    fetch_arguments(execute_with_arguments)
+
+# Function to submit results to the server
+def submit_results(results):
+    challenge_id = window.challenge_id
+    data = window.JSON.stringify({"challenge_id": challenge_id, "results": results})
+    
+    req = window.XMLHttpRequest.new()
+    req.bind("load", lambda e: display_message(window.JSON.parse(req.responseText)))  # Parse JSON response
+    req.open('POST', '/submit_result', True)
+    req.setRequestHeader('Content-Type', 'application/json')
+    req.send(data)
+
+# Function to display response message
+def display_message(response):
+    document["output"].text = response.get("message", "No response message")
+
+# Attach run_user_code to submit button
+document["submit-btn"].bind("click", run_user_code)
+</script>
+
+
+
+    <script>
+        // JavaScript to set the challenge_id when a challenge is selected
+        document.addEventListener("DOMContentLoaded", function() {
+            const challengeButtons = document.querySelectorAll(".challenge-btn");
+            challengeButtons.forEach(button => {
+                button.addEventListener("click", function() {
+                    challenge_id = this.getAttribute("data-id");
+                });
+            });
+        });
+    </script>
 
 </body>
 </html>

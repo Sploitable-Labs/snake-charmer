@@ -5,6 +5,7 @@ import os
 
 app = Flask(__name__)
 
+# Load all challenges from JSON files at startup
 challenges = []
 
 def load_all_challenges():
@@ -12,13 +13,19 @@ def load_all_challenges():
     challenges.clear()  # Clear existing data if reloading
 
     challenges_dir = os.path.join(app.root_path, 'data/challenges')
-    
+    all_challenges = []
+
     # Load each JSON file in the challenges directory
     for filepath in glob(os.path.join(challenges_dir, '*.json')):
         with open(filepath, 'r') as file:
             data = json.load(file)
-            challenges.extend(data)  # Assuming each JSON file contains a list of challenges
-    
+            all_challenges.extend(data)  # Assuming each JSON file contains a list of challenges
+
+    # Assign a unique ID to each challenge
+    for index, challenge in enumerate(all_challenges, start=1):
+        challenge['id'] = index  # Assign IDs sequentially
+    challenges.extend(all_challenges)
+
     return challenges
 
 # Load or initialize user data
@@ -28,72 +35,60 @@ try:
 except FileNotFoundError:
     user_data = {"score": 0, "completed_challenges": []}
 
-def run_user_code(code, test_cases):
-    """
-    Executes the user's code and checks it against test cases.
-    The code must define a function named 'foo' to be tested.
-    """
-    try:
-        # Execute the user code in a restricted local environment
-        local_scope = {}
-        exec(code, {}, local_scope)
-        
-        # Retrieve the 'foo' function
-        foo = local_scope.get("foo")
-        if not foo:
-            return False, "Function 'foo' is not defined.", 0
-
-        # Run test cases
-        passed_tests = 0
-        for test in test_cases:
-            if foo(*test['input']) == test['expected_output']:
-                passed_tests += 1
-
-        # Calculate the percentage of tests passed
-        success = passed_tests == len(test_cases)
-        percentage = (passed_tests / len(test_cases)) * 100
-        return success, f"{percentage}% of tests passed.", passed_tests
-
-    except Exception as e:
-        # Capture any exceptions in user code execution
-        return False, f"Error: {str(e)}", 0
-
 @app.route('/')
 def index():
-    # Pass the challenges and user data to the frontend
-    challenges = load_all_challenges()
+    # Load challenges for the frontend
+    load_all_challenges()
     return render_template('index.html', challenges=challenges, user_data=user_data)
 
-@app.route('/submit', methods=['POST'])
-def submit():
-    code = request.form['code']
-    challenge_id = int(request.form['challenge_id'])
-    available_score = int(request.form['available_score'])  # Get the adjusted score after hints
+@app.route('/get_test_arguments', methods=['GET'])
+def get_test_arguments():
+    """Endpoint to fetch test arguments for a specific challenge."""
+    challenge_id = request.args.get('challenge_id', type=int)
+    challenge = next((c for c in challenges if c['id'] == challenge_id), None)
+    
+    if not challenge:
+        return jsonify({"success": False, "message": "Challenge not found."})
+    
 
-    # Find the challenge by ID
+    # Return only the inputs for test cases, not the expected outputs
+    test_arguments = [test_case['input'] for test_case in challenge['test_cases']]
+    return jsonify({"success": True, "test_arguments": test_arguments})
+
+@app.route('/submit_result', methods=['POST'])
+def submit_result():
+    """Endpoint to receive the list of results from the user's code execution."""
+    data = request.json
+    challenge_id = data.get('challenge_id')
+    results = data.get('results')  # List of results from user's code
+    
+    # Find the challenge by ID to access expected outputs
     challenge = next((c for c in challenges if c['id'] == challenge_id), None)
     if not challenge:
         return jsonify({"success": False, "message": "Challenge not found."})
 
-    # Run user code against the challenge's test cases
-    success, message, points = run_user_code(code, challenge['test_cases'])
+    # Check if the user's results match the expected outputs
+    expected_outputs = [test_case['expected_output'] for test_case in challenge['test_cases']]
+    passed_tests = sum(1 for result, expected in zip(results, expected_outputs) if result == expected)
     
-    if success:
-        challenge_score = 0  # Initialize variable for points awarded for this challenge
-        if challenge_id not in user_data['completed_challenges']:
-            challenge_score = available_score  # Award points based on available score
-            user_data['score'] += challenge_score  # Update the user's total score
-            user_data['completed_challenges'].append(challenge_id)  # Mark challenge as completed
-            message = f"Challenge completed! You earned {challenge_score} points."
+    # Determine if the challenge is fully passed
+    success = passed_tests == len(expected_outputs)
+    if success and challenge_id not in user_data['completed_challenges']:
+        user_data['completed_challenges'].append(challenge_id)
+        user_data['score'] += challenge['score']  # Assume challenge score is defined in the JSON
 
-        # Save user progress to config.json
+        # Save updated user data to config.json
         with open('data/config.json', 'w') as f:
             json.dump(user_data, f)
 
-        # Return success, the total score, and the points for the current challenge
-        return jsonify({"success": success, "message": message, "score": user_data['score'], "challenge_score": challenge_score})
-
-    return jsonify({"success": False, "message": message})
+    message = f"{passed_tests}/{len(expected_outputs)} tests passed."
+    return jsonify({
+        "success": success,
+        "message": message,
+        "score": user_data['score'],
+        "passed_tests": passed_tests,
+        "total_tests": len(expected_outputs)
+    })
 
 if __name__ == '__main__':
     app.run(debug=True)
