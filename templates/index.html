@@ -325,7 +325,6 @@ def run_user_code(event):
 
     fetch_arguments(execute_with_arguments)
 
-# Updated function to submit results to the server and handle response
 # Updated function to submit execution results to the server and handle response
 def submit_results(results):
     challenge_id = window.challenge_id
@@ -342,6 +341,10 @@ def submit_results(results):
             if response_data["success"]:  # Access properties directly
                 show_modal("Congratulations!", f"Challenge completed! You earned {response_data['challenge_score']} points.", "fas fa-trophy text-success")
                 
+                # Update client-side user_data with latest score and completed challenges
+                window.user_data["score"] = response_data["score"]
+                window.user_data["completed_challenges"] = response_data["completed_challenges"]
+
                 active_challenge = document.querySelector('.challenge-btn.active-challenge')
                 if active_challenge and not active_challenge.select_one('.tick-mark'):
                     active_challenge.innerHTML += ' <i class="fas fa-check-circle tick-mark"></i>'
@@ -397,6 +400,11 @@ document["submit-btn"].bind("click", run_user_code)
             });
         });
     </script>
+
+    <script type="text/javascript">
+        window.user_data = {{ user_data | tojson }};
+    </script>
+
 
 </body>
 </html>

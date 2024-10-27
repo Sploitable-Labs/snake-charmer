@@ -42,16 +42,16 @@ def load_all_challenges():
 
     return challenges
 
-# Load or initialize user data
-try:
-    with open('data/config.json') as f:
-        user_data = json.load(f)
-except FileNotFoundError:
-    user_data = {"score": 0, "completed_challenges": []}
-
 @app.route('/')
 def index():
     load_all_challenges()
+
+    # Initialize user_data in session if it doesn't exist
+    if 'user_data' not in session:
+        session['user_data'] = {
+            'score': 0,
+            'completed_challenges': []
+        }
 
     # Prepare sanitized challenges for the frontend
     sanitized_challenges = [
@@ -67,7 +67,7 @@ def index():
         for challenge in challenges
     ]
 
-    return render_template('index.html', challenges=sanitized_challenges, user_data=user_data)
+    return render_template('index.html', challenges=sanitized_challenges, user_data=session['user_data'])
 
 
 @app.route('/get_test_arguments', methods=['GET'])
@@ -115,14 +115,14 @@ def submit_result():
     # Adjust final score if the challenge is successfully completed
     final_score = max(base_score - total_penalty, 0) if success else 0
 
+    # Initialize session data if it doesn't exist
+    user_data = session.get('user_data', {'score': 0, 'completed_challenges': []})
+
     # Update user score and completed challenges only if challenge is successfully passed
     if success and challenge_id not in user_data['completed_challenges']:
         user_data['completed_challenges'].append(challenge_id)
         user_data['score'] += final_score  # Add the adjusted score
-
-        # Save updated user data to config.json
-        with open('data/config.json', 'w') as f:
-            json.dump(user_data, f)
+        session['user_data'] = user_data  # Update session with new user_data
 
     # Prepare the response message
     message = f"{passed_tests}/{len(expected_outputs)} tests passed."
@@ -131,6 +131,7 @@ def submit_result():
         "success": success,
         "message": message,
         "score": user_data['score'],
+        "completed_challenges": user_data['completed_challenges'],
         "challenge_score": final_score,  # Return the score for this challenge after penalties
         "passed_tests": passed_tests,
         "total_tests": len(expected_outputs)
@@ -158,8 +159,9 @@ def get_hint():
     session.modified = True
 
     hint_text = challenge["hints"][hint_index]["text"]
+    penalty = challenge["hints"][hint_index]["penalty"]
 
-    return jsonify({"hint_text": hint_text})
+    return jsonify({"hint_text": hint_text, "penalty": penalty})
 
 
 if __name__ == '__main__':

@@ -9,6 +9,11 @@ document.addEventListener('DOMContentLoaded', function () {
     editor.renderer.setPadding(10);
     editor.setReadOnly(true);
 
+    function isChallengeCompleted(challengeId) {
+        // Check if user_data.completed_challenges contains the challenge ID
+        return window.user_data.completed_challenges.includes(String(challengeId));
+    }
+
     // Initialize settings modal
     document.getElementById('settings-icon').addEventListener('click', () => {
         const settingsModal = new bootstrap.Modal(document.getElementById('settings-modal'));
@@ -88,6 +93,13 @@ document.addEventListener('DOMContentLoaded', function () {
                         hintButton.classList.add('btn', 'btn-outline-secondary', 'hint-btn');
                         hintButton.textContent = `Reveal Hint ${i + 1}`;
                         hintButton.dataset.hintIndex = i;
+
+                        console.log(currentChallenge.id);
+                        console.log(isChallengeCompleted(currentChallenge.id));
+                        if(isChallengeCompleted(currentChallenge.id)){
+                            hintButton.disabled = true;
+                        }
+                        console.log(hintButton);
 
                         // Attach click event to request the hint from the server
                         hintButton.addEventListener('click', () => {
@@ -171,6 +183,12 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             if (data.hint_text) {
                 hintContent.innerHTML += `<p>${data.hint_text}</p>`;
+                 
+                if(!isChallengeCompleted(currentChallenge)) { // TODO: change condition to check if challenge is not solved
+                    availableScore = Math.max(0, availableScore - data.penalty); // Deduct score but keep non-negative
+                    updateAvailableScore()
+                }
+                
             } else {
                 alert("Error: " + data.error);
             }
