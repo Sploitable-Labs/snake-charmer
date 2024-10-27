@@ -55,7 +55,7 @@ def get_test_arguments():
     test_arguments = [test_case['input'] for test_case in challenge['test_cases']]
     return jsonify({"success": True, "test_arguments": test_arguments})
 
-@app.route('/submit_result', methods=['POST'])
+@app.route('/submit_results', methods=['POST'])
 def submit_result():
     """Endpoint to receive the list of results from the user's code execution."""
     data = request.json

@@ -263,8 +263,15 @@
         </div>
     </div>
 
- <script type="text/python">
+<script type="text/python">
 from browser import document, console, window
+
+# Function to show a modal with specified title, message, and icon
+def show_modal(title, message, icon_class):
+    document["notificationModalLabel"].text = title
+    document["modal-message"].text = message
+    document["modal-icon"].className = icon_class
+    window.bootstrap.Modal.new(document["notificationModal"]).show()
 
 # Function to fetch arguments from the server
 def fetch_arguments(callback):
@@ -276,34 +283,25 @@ def fetch_arguments(callback):
 
     def on_complete(req):
         try:
-            # Parse JSON response using responseText
             response_data = window.JSON.parse(req.responseText)
             console.log("Response Data:", response_data)
 
-            # Check if success exists and is True
             if response_data["success"]:
-                # Extract `test_arguments` from response data
                 test_arguments = response_data["test_arguments"]
                 console.log("Test Arguments:", test_arguments)
-                
-                # Call the callback with `test_arguments`
                 callback(test_arguments)
             else:
                 console.log("Error: Failed to fetch arguments.")
         except Exception as e:
             console.log("Error processing response:", str(e))
 
-    # AJAX request setup
     req = window.XMLHttpRequest.new()
     req.open('GET', f'/get_test_arguments?challenge_id={challenge_id}', True)
     req.bind('load', lambda _: on_complete(req))
     req.send()
 
-
-
 # Function to run user code with fetched arguments
 def run_user_code(event):
-    # Check if a challenge is selected
     challenge_id = window.challenge_id
     if not challenge_id:
         show_modal("Warning", "Please select a challenge.", "fas fa-exclamation-triangle text-warning")
@@ -314,19 +312,13 @@ def run_user_code(event):
     results = []
     local_scope = {}
 
-    # Execute user code with fetched arguments
     def execute_with_arguments(arguments):
         try:
             exec(user_code, {}, local_scope)
-
             if 'foo' in local_scope:
                 foo = local_scope['foo']
-                print(f"arguments {arguments}")
                 for args in arguments:
-                    result = foo(*args)
-                    print(f"result {result}")
-                    results.append(result)
-                print(f"results {results}")
+                    results.append(foo(*args))
                 submit_results(results)
             else:
                 output_area.text = "Error: Function 'foo' not found in code."
@@ -335,40 +327,62 @@ def run_user_code(event):
 
     fetch_arguments(execute_with_arguments)
 
-# Function to submit results to the server
+# Updated function to submit results to the server and handle response
+# Updated function to submit execution results to the server and handle response
 def submit_results(results):
     challenge_id = window.challenge_id
-    data = window.JSON.stringify({"challenge_id": challenge_id, "results": results})
-    
+    available_score = int(document["available-score"].text)  # Get available score from the DOM
+
+    # Prepare data as JSON to submit only the results and challenge details
+    data = window.JSON.stringify({
+        "challenge_id": challenge_id,
+        "results": results,
+        "available_score": available_score
+    })
+
+    def on_success(req):
+        try:
+            response_data = window.JSON.parse(req.responseText)  # Use responseText instead of text
+            if response_data["success"]:  # Access properties directly
+                show_modal("Congratulations!", f"Challenge completed! You earned {response_data['score']} points.", "fas fa-trophy text-success")
+                
+                active_challenge = document.querySelector('.challenge-btn.active-challenge')
+                if active_challenge and not active_challenge.select_one('.tick-mark'):
+                    active_challenge.innerHTML += ' <i class="fas fa-check-circle tick-mark"></i>'
+                
+                document["score"].text = str(response_data["score"])
+
+                # Reset available score to zero in the DOM
+                document["available-score"].text = "0"
+            else:
+                failure_messages = [
+                    "Oops! Better luck next time.",
+                    "Close, but not quite!",
+                    "Almost there! Keep trying!",
+                    "Hmm... something went awry!"
+                ]
+                random_index = int(window.Math.random() * len(failure_messages))
+                random_message = failure_messages[random_index]
+                show_modal("Try Again!", random_message, "fas fa-times-circle text-danger")
+        except Exception as e:
+            console.error("Error processing response:", str(e))
+            show_modal("Error", "An error occurred while submitting the results.", "fas fa-exclamation-triangle text-warning")
+
+
+    def on_failure(req):
+        console.error("Error submitting results:", req)
+        show_modal("Error", "An error occurred while submitting the results.", "fas fa-exclamation-triangle text-warning")
+
     req = window.XMLHttpRequest.new()
-    req.bind("load", lambda e: display_message(window.JSON.parse(req.responseText)))  # Parse JSON response
-    req.open('POST', '/submit_result', True)
-    req.setRequestHeader('Content-Type', 'application/json')
-    req.send(data)
+    req.bind("load", lambda e: on_success(req) if req.status == 200 else on_failure(req))
+    req.open("POST", "/submit_results", True)
+    req.setRequestHeader("Content-Type", "application/json")  # Set header to application/json
+    req.send(data)  # Send JSON data
 
-# Function to display response message
-def display_message(response):
-    # Access properties directly instead of using .get()
-    message = response.message if hasattr(response, "message") else "No response message"
-    passed_tests = response.passed_tests if hasattr(response, "passed_tests") else 0
-    total_tests = response.total_tests if hasattr(response, "total_tests") else 0
-    score = response.score if hasattr(response, "score") else 0
 
-    # Log the full response for debugging purposes
-    console.log("Response from server:", response)
-
-    # Display message in the output area
-    document["output"].text = message
-
-    # Update the score in the score banner
-    document["score"].text = str(score)
-
-    # Optionally, update additional UI elements with test results
-    if passed_tests == total_tests:
-        document["output"].text += f"\n🎉 All {total_tests} tests passed!"
-    else:
-        document["output"].text += f"\n{passed_tests}/{total_tests} tests passed. Keep trying!"
-
+# Function to update available score display (optional if needed for other changes)
+def update_available_score():
+    document["available-score"].text = str(window.availableScore)
 
 # Attach run_user_code to submit button
 document["submit-btn"].bind("click", run_user_code)
