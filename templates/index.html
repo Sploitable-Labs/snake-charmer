@@ -329,13 +329,11 @@ def run_user_code(event):
 # Updated function to submit execution results to the server and handle response
 def submit_results(results):
     challenge_id = window.challenge_id
-    available_score = int(document["available-score"].text)  # Get available score from the DOM
 
     # Prepare data as JSON to submit only the results and challenge details
     data = window.JSON.stringify({
         "challenge_id": challenge_id,
         "results": results,
-        "available_score": available_score
     })
 
     def on_success(req):

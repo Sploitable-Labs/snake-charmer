@@ -2,8 +2,15 @@ from flask import Flask, render_template, request, jsonify
 import json
 from glob import glob
 import os
+from datetime import timedelta
+import secrets
 
 app = Flask(__name__)
+
+app.secret_key = secrets.token_hex(32)  # Generates a secure 64-character hexadecimal key
+
+# Set session lifetime to a very high value (e.g., 100 years)
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=365 * 100)
 
 # Load all challenges from JSON files at startup
 challenges = []
