@@ -49,6 +49,12 @@ document.addEventListener('DOMContentLoaded', function () {
             editor.setReadOnly(false);
             submitButton.removeAttribute('disabled');
 
+            // Remove 'active-challenge' class from all buttons
+            challengeButtons.forEach(btn => btn.classList.remove('active-challenge'));
+
+            // Add 'active-challenge' class to the clicked button
+            this.classList.add('active-challenge');
+
             // Load challenge details
             const challengeId = parseInt(this.dataset.id);
 
@@ -120,65 +126,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     submitButton.addEventListener('click', () => {
-        const code = editor.getValue();
         const activeChallenge = document.querySelector('.challenge-btn.active-challenge');
 
         if (!activeChallenge) {
             showModal("Warning", "Please select a challenge.", "fas fa-exclamation-triangle text-warning");
             return;
         }
-
-        const challengeId = activeChallenge.dataset.id;
-
-        // Execute the user code with Brython
-        executeUserCode(code, window.testArguments, challengeId);
     });
-
-    function executeUserCode(code, testArguments, challengeId) {
-        const localScope = {};
-        const results = [];
-
-        try {
-            // Execute the user's code in an isolated scope
-            exec(code, {}, localScope);
-
-            // Check if the function 'foo' exists and execute it with each argument set
-            if ('foo' in localScope) {
-                const foo = localScope['foo'];
-                testArguments.forEach(args => results.push(foo(...args)));
-                submitResults(challengeId, results);
-            } else {
-                showModal("Error", "Function 'foo' is not defined.", "fas fa-exclamation-circle text-danger");
-            }
-        } catch (error) {
-            console.error("Error executing code:", error);
-            showModal("Error", "An error occurred while running your code.", "fas fa-exclamation-circle text-danger");
-        }
-    }
-
-    // Submit the list of results back to the server for validation
-    function submitResults(challengeId, results) {
-        fetch('/submit_result', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ challenge_id: challengeId, results: results })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                showModal("Congratulations!", `${data.message} You earned ${availableScore} points.`, "fas fa-trophy text-success");
-                document.getElementById('score').textContent = data.score;
-                availableScore = 0;
-                updateAvailableScore();
-            } else {
-                showModal("Try Again!", data.message, "fas fa-times-circle text-danger");
-            }
-        })
-        .catch(error => {
-            console.error("Error submitting results:", error);
-            showModal("Error", "An error occurred while submitting results.", "fas fa-exclamation-triangle text-warning");
-        });
-    }
 
     function showModal(title, message, iconClass) {
         document.getElementById('notificationModalLabel').textContent = title;
