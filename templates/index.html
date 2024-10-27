@@ -303,6 +303,12 @@ def fetch_arguments(callback):
 
 # Function to run user code with fetched arguments
 def run_user_code(event):
+    # Check if a challenge is selected
+    challenge_id = window.challenge_id
+    if not challenge_id:
+        show_modal("Warning", "Please select a challenge.", "fas fa-exclamation-triangle text-warning")
+        return
+
     user_code = window.editor.getValue()
     output_area = document["output"]
     results = []

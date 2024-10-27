@@ -125,15 +125,6 @@ document.addEventListener('DOMContentLoaded', function () {
         hintButtonsContainer.innerHTML = "";
     }
 
-    submitButton.addEventListener('click', () => {
-        const activeChallenge = document.querySelector('.challenge-btn.active-challenge');
-
-        if (!activeChallenge) {
-            showModal("Warning", "Please select a challenge.", "fas fa-exclamation-triangle text-warning");
-            return;
-        }
-    });
-
     function showModal(title, message, iconClass) {
         document.getElementById('notificationModalLabel').textContent = title;
         document.getElementById('modal-message').textContent = message;
