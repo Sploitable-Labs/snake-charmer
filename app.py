@@ -63,7 +63,11 @@ def submit_result():
     results = data.get('results')  # List of results from user's code
     
     # Find the challenge by ID to access expected outputs
-    challenge = next((c for c in challenges if c['id'] == challenge_id), None)
+    challenge = next((c for c in challenges if c['id'] == int(challenge_id)), None)
+
+    print(f"Challenge ID: {challenge_id}")
+    print(f"c: {challenge}")
+
     if not challenge:
         return jsonify({"success": False, "message": "Challenge not found."})
 
