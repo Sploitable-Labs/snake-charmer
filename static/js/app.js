@@ -99,6 +99,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         if(isChallengeCompleted(currentChallenge.id)){
                             hintButton.disabled = true;
                             submitButton.disabled = true;
+                            availableScore = 0;
+                            updateAvailableScore()
                         }
                         console.log(hintButton);
 
