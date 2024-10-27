@@ -340,7 +340,7 @@ def submit_results(results):
         try:
             response_data = window.JSON.parse(req.responseText)  # Use responseText instead of text
             if response_data["success"]:  # Access properties directly
-                show_modal("Congratulations!", f"Challenge completed! You earned {response_data['score']} points.", "fas fa-trophy text-success")
+                show_modal("Congratulations!", f"Challenge completed! You earned {response_data['challenge_score']} points.", "fas fa-trophy text-success")
                 
                 active_challenge = document.querySelector('.challenge-btn.active-challenge')
                 if active_challenge and not active_challenge.select_one('.tick-mark'):

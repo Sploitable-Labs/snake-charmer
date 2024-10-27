@@ -75,17 +75,33 @@ document.addEventListener('DOMContentLoaded', function () {
                 updateAvailableScore();
                 resetHints();
 
+                // Clear previous hint buttons
+                hintButtonsContainer.innerHTML = "";
+
                 // Display hints if available
-                if (currentChallenge.hints?.length > 0) {
+                if (currentChallenge.hint_count > 0) {
                     hintsHeader.style.display = 'block';
-                    currentChallenge.hints.forEach((hint, index) => {
+                    
+                    // Create hint buttons based on `hint_count`
+                    for (let i = 0; i < currentChallenge.hint_count; i++) {
                         const hintButton = document.createElement('button');
                         hintButton.classList.add('btn', 'btn-outline-secondary', 'hint-btn');
-                        hintButton.textContent = `Reveal Hint ${index + 1}`;
-                        hintButton.dataset.hintIndex = index;
-                        hintButton.addEventListener('click', () => revealHint(index, hint.penalty, hint.text));
+                        hintButton.textContent = `Reveal Hint ${i + 1}`;
+                        hintButton.dataset.hintIndex = i;
+
+                        // Attach click event to request the hint from the server
+                        hintButton.addEventListener('click', () => {
+                            requestHint(challengeId, i);  // Fetch hint text from the server
+                        });
+
                         hintButtonsContainer.appendChild(hintButton);
-                    });
+
+                        // Create a placeholder for hint text display
+                        const hintText = document.createElement('p');
+                        hintText.id = `hint-${i}-text`;
+                        hintText.classList.add('hint-text');
+                        hintButtonsContainer.appendChild(hintText);
+                    }
                 } else {
                     hintsHeader.style.display = 'none';
                 }
@@ -156,3 +172,21 @@ document.addEventListener('keyup', function(event) {
         keyElement.classList.remove('highlighted');
     }
 });
+
+// Function to request a hint from the server
+function requestHint(challengeId, hintIndex) {
+    fetch('/get_hint', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ challenge_id: challengeId, hint_index: hintIndex })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.hint_text) {
+            document.getElementById(`hint-${hintIndex}-text`).textContent = data.hint_text;
+        } else {
+            alert("Error: " + data.error);
+        }
+    })
+    .catch(error => console.error("Error fetching hint:", error));
+}
