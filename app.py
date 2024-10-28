@@ -42,6 +42,12 @@ def load_all_challenges():
 
     return challenges
 
+@app.template_filter('sort_ninja_last')
+def sort_ninja_last(categories):
+    # Sort categories, keeping "Ninja" at the end
+    sorted_categories = sorted(categories, key=lambda x: (x[0] == 'Ninja', x[0]))
+    return sorted_categories
+
 @app.route('/')
 def index():
     session.permanent = True  # Make the session permanent to store data for a long time

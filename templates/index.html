@@ -37,7 +37,7 @@
             <!-- Collapsible Challenge Selection Menu -->
             <div id="challenge-menu-outer" class="col-md-3 col-lg-3"    >
             <aside id="challenge-menu" class="challenge-menu">
-                {% for category in challenges | groupby("category") %}
+                {% for category in challenges | groupby("category") | sort_ninja_last %}
                 <div class="category">
                     <button class="category-title" data-bs-toggle="collapse" data-bs-target="#cat-{{ loop.index }}" aria-expanded="false" aria-controls="cat-{{ loop.index }}">
                         {{ category.grouper }} <i class="fas fa-chevron-down float-end"></i>
