@@ -198,3 +198,31 @@ def foo(numbers):
 #MaxTupleSum
 def foo(tuples_list):
     return max(tuples_list, key=lambda x: sum(x))
+
+## Ninja
+
+# Part 1
+def foo(x):
+    return x[::-1]
+
+# Part 2
+def foo():
+    encoded_hex = "185300520565441c13075e495d01370c5b161f1a17531970015d1e1d4158585e2e2f594d070d2d45282f2f"
+    key = "m4g1c_k3y"
+    xor_bytes = bytes.fromhex(encoded_hex)
+    key_bytes = key.encode('utf-8')
+    decoded_bytes = bytes([xor_bytes[i] ^ key_bytes[i % len(key_bytes)] for i in range(len(xor_bytes))])
+    return decoded_bytes.decode('utf-8')
+
+# Part 3
+def foo():
+    z = "uggcf://jjj.lbhghor.pbz/jngpu?i=qDj4j9JtKpD"
+    result = []
+    for char in z:
+        if 'A' <= char <= 'Z':
+            result.append(chr((ord(char) - ord('A') + 13) % 26 + ord('A')))
+        elif 'a' <= char <= 'z':
+            result.append(chr((ord(char) - ord('a') + 13) % 26 + ord('a')))
+        else:
+            result.append(char)
+    return ''.join(result)

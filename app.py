@@ -104,7 +104,7 @@ def submit_result():
     # Check if the user's results match the expected outputs
     expected_outputs = [test_case['expected_output'] for test_case in challenge['test_cases']]
     passed_tests = sum(1 for result, expected in zip(results, expected_outputs) if result == expected)
-    
+
     # Determine if the challenge is fully passed
     success = passed_tests == len(expected_outputs)
     base_score = challenge['score']  # Base score defined in the JSON

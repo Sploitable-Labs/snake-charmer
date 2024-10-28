@@ -1,0 +1,45 @@
+[
+    {
+        "id": 100,
+        "name": "Deobfuscation - Part 1",
+        "category": "Ninja",
+        "difficulty": "Easy",
+        "score": 20,
+        "instructions": "You know what to do ;-)",
+        "hints": [
+            {"text": "Help will always be given at Hogwarts to those who ask for it. Unfortunately, you're not at Hogwarts.", "penalty": 0}
+        ],
+        "test_cases": [
+            {"input": ["f2f28254d2d070d495f2e2e5858514d1e1d51007913571a1f161b5c07310d594e57031c144565025003581"], "expected_output": "185300520565441c13075e495d01370c5b161f1a17531970015d1e1d4158585e2e2f594d070d2d45282f2f"},
+            {"input": ["y3k_c1g4m"], "expected_output": "m4g1c_k3y"}
+        ]
+    },
+    {
+        "id": 101,
+        "name": "Deobfuscation - Part 2",
+        "category": "Ninja",
+        "difficulty": "Hard",
+        "score": 50,
+        "instructions": "The force is strong with this one. Use you previous answer as your starting point",
+        "hints": [
+            {"text": "There is a way out of every box, a solution to every puzzle; it's just a matter of finding it.", "penalty": 0}
+        ],
+        "test_cases": [
+            {"input": [], "expected_output": "uggcf://jjj.lbhghor.pbz/jngpu?i=qDj4j9JtKpD"}
+        ]
+    },
+    {
+        "id": 102,
+        "name": "Deobfuscation - Part 3",
+        "category": "Ninja",
+        "difficulty": "Medium",
+        "score": 30,
+        "instructions": "You know what to do. Surely you can't fail now... :D",
+        "hints": [
+            {"text": "There is a difference between knowing the path and walking the path. Get coding!", "penalty": 0}
+        ],
+        "test_cases": [
+            {"input": [], "expected_output": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"}
+        ]
+    }
+]
