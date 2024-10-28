@@ -45,3 +45,7 @@ def foo(dict1, dict2):
 #ReverseString
 def foo(input_string):
     return input_string[::-1]
+
+#InvertDict
+def foo(dictionary):
+    return {value: key for key, value in dictionary.items()}
