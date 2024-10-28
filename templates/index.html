@@ -308,7 +308,7 @@ def convert_test_cases(js_test_cases):
         js_test_case = js_test_cases[idx]
         test_case = []
         for js_arg in js_test_case:
-            if is_iterable(js_arg) and not isinstance(js_arg, str) not isinstance(js_arg, list):
+            if is_iterable(js_arg) and not isinstance(js_arg, str) and not isinstance(js_arg, list):
                 arg = dict(js_arg)
             else:
                 arg = js_arg
