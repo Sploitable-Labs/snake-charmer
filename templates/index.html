@@ -280,11 +280,9 @@ def fetch_arguments(callback):
     def on_complete(req):
         try:
             response_data = window.JSON.parse(req.responseText)
-            console.log("Response Data:", response_data)
 
             if response_data["success"]:
                 test_arguments = response_data["test_arguments"]
-                console.log("Test Arguments:", test_arguments)
                 callback(test_arguments)
             else:
                 console.log("Error: Failed to fetch arguments.")
@@ -303,6 +301,21 @@ def is_iterable(obj):
     except TypeError:  # If it raises TypeError, it's not iterable
         return False
 
+def convert_test_cases(js_test_cases):
+    num_test_cases = len(js_test_cases)
+    test_cases = []
+    for idx in range(num_test_cases):
+        js_test_case = js_test_cases[idx]
+        test_case = []
+        for js_arg in js_test_case:
+            if is_iterable(js_arg) and not isinstance(js_arg, str):
+                arg = dict(js_arg)
+            else:
+                arg = js_arg
+            test_case.append(arg)
+        test_cases.append(test_case)
+    return test_cases
+
 # Function to run user code with fetched arguments
 def run_user_code(event):
     challenge_id = window.challenge_id
@@ -315,27 +328,14 @@ def run_user_code(event):
     results = []
     local_scope = {}
 
-    def execute_with_arguments(arguments):
-
-        # This block maps js objects to python dictionaries
-        darguments = []
-        for idx in range(len(arguments)):
-            arg = arguments[idx][0]
-
-            if is_iterable(arg) and not isinstance(arg, str):
-                darg = dict(arg)
-            else:
-                darg = arg
-
-            darguments.append(darg)
-
+    def execute_with_arguments(js_test_cases):
         try:
             exec(user_code, {}, local_scope)
             if 'foo' in local_scope:
                 foo = local_scope['foo']
                 output_area.text = ""
-                for args in darguments:         
-                    result = foo(args)
+                for test_case in convert_test_cases(js_test_cases):       
+                    result = foo(*test_case)
                     output_area.text += str(result) + "\n"
                     results.append(result)
                 submit_results(results)

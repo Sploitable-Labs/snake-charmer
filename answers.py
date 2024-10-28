@@ -1,3 +1,7 @@
+# OddEven
+def foo(x):
+    return 'Even' if x % 2 == 0 else 'Odd'
+
 # FizzBuzz
 def foo(n):
     ans = []
@@ -12,10 +16,32 @@ def foo(n):
             ans.append(str(num))
     return ans
 
-# OddEven
-def foo(x):
-    return 'Even' if x % 2 == 0 else 'Odd'
-
 #ExtractKeys
 def foo(x):
     return [key for key, val in x.items()]
+
+#Bin2Dec
+def foo(x):
+    return int(x, 2)
+
+#Dec2Bin
+def foo(x):
+    return bin(x)[2:]
+
+#SumDict
+def foo(dictionary):
+    return sum(value for value in dictionary.values() if isinstance(value, (int, float)))
+
+#Dict2TupleList
+def foo(dictionary):
+    return list(dictionary.items())
+
+#MergeDicts
+def foo(dict1, dict2):
+    merged_dict = dict1.copy()
+    merged_dict.update(dict2)
+    return merged_dict
+
+#ReverseString
+def foo(input_string):
+    return input_string[::-1]
