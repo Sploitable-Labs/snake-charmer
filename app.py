@@ -44,6 +44,7 @@ def load_all_challenges():
 
 @app.route('/')
 def index():
+    session.permanent = True  # Make the session permanent to store data for a long time
     load_all_challenges()
 
     # Initialize user_data in session if it doesn't exist
