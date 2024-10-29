@@ -296,7 +296,7 @@ fail_sound = window.Audio.new("/static/sounds/fail.mp3")
 error_sound = window.Audio.new("/static/sounds/error.mp3")
 hint_sound = window.Audio.new("/static/sounds/hint.mp3")
 ninja_unlock_sound = window.Audio.new("/static/sounds/ninja_unlock.mp3")
-ninja_success = window.Audio.new("/static/sounds/ninja_success.mp3")
+ninja_success_sound = window.Audio.new("/static/sounds/ninja_success.mp3")
 
 # Function to show a modal with specified title, message, and icon
 def show_modal(title, message, icon_class, on_close=None):
@@ -425,13 +425,13 @@ def submit_results(results):
                         # Show modal with a callback to reload the page after dismissal
                         show_modal(
                             "Congratulations!",
-                            f"Challenge completed! You earned {response_data['challenge_score']} points.",
-                            "fas fa-trophy text-success",
+                            f"You have unlocked the ninja challenge!",
+                            "fas fa-user-ninja text-success",
                             on_close=lambda: window.location.reload()  # Callback to reload the page
                         )
 
                         # Play ninja sound
-                        success_sound.play()
+                        ninja_unlock_sound.play()
                 else:
                     # Show modal without a reload callback
                     show_modal(
