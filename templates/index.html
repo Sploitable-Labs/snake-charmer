@@ -292,6 +292,11 @@ from browser import document, console, window
 
 # sounds
 success_sound = window.Audio.new("/static/sounds/success.mp3")
+fail_sound = window.Audio.new("/static/sounds/fail.mp3")
+error_sound = window.Audio.new("/static/sounds/error.mp3")
+hint_sound = window.Audio.new("/static/sounds/hint.mp3")
+ninja_unlock_sound = window.Audio.new("/static/sounds/ninja_unlock.mp3")
+ninja_success = window.Audio.new("/static/sounds/ninja_success.mp3")
 
 # Function to show a modal with specified title, message, and icon
 def show_modal(title, message, icon_class, on_close=None):
@@ -383,8 +388,13 @@ def run_user_code(event):
                 submit_results(results)
             else:
                 output_area.text = "Error: Function 'foo' not found in code."
+
+
         except Exception as e:
             output_area.text = f"Error: {str(e)}"
+
+            # Play error sound
+            error_sound.play()
 
     fetch_arguments(execute_with_arguments)
 
@@ -429,6 +439,7 @@ def submit_results(results):
                         f"Challenge completed! You earned {response_data['challenge_score']} points.",
                         "fas fa-trophy text-success"
                     )
+
                     # Play success sound
                     success_sound.play()
 
@@ -465,15 +476,24 @@ def submit_results(results):
                 ]
                 random_index = int(window.Math.random() * len(failure_messages))
                 random_message = failure_messages[random_index]
-                show_modal("Try Again!", random_message, "fas fa-times-circle text-danger")
-        except Exception as e:
-            console.error("Error processing response:", str(e))
-            show_modal("Error", "An error occurred while submitting the results.", "fas fa-exclamation-triangle text-warning")
 
+                show_modal("Try Again!", random_message, "fas fa-times-circle text-danger")
+
+                # Play fail sound
+                fail_sound.play()
+
+        except Exception as e:           
+            show_modal("Error", "An error occurred while submitting the results.", "fas fa-exclamation-triangle text-warning")
+            
+            # Play error sound
+            error_sound.play()
 
     def on_failure(req):
         console.error("Error submitting results:", req)
         show_modal("Error", "An error occurred while submitting the results.", "fas fa-exclamation-triangle text-warning")
+
+        # Play error sound
+        error_sound.play()
 
     req = window.XMLHttpRequest.new()
     req.bind("load", lambda e: on_success(req) if req.status == 200 else on_failure(req))

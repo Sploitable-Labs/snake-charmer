@@ -1,4 +1,5 @@
 // Load sound file
+const hint_sound = new Audio("/static/sounds/hint.mp3");
 
 document.addEventListener('DOMContentLoaded', function () {
     const editor = ace.edit("code-editor");
@@ -108,6 +109,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         // Attach click event to request the hint from the server
                         hintButton.addEventListener('click', () => {
+                            // Play hint sound
+                            hint_sound.play();
+
                             requestHint(challengeId, i);  // Fetch hint text from the server
                             // Disable the button after it's clicked
                             hintButton.disabled = true;
