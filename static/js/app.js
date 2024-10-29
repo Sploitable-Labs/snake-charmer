@@ -198,5 +198,13 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch(error => console.error("Error fetching hint:", error));
     }
+
+    // Attach event listener to the Ninja placeholder button
+    document.getElementById('ninja-placeholder').addEventListener('click', () => {
+        const unlockModal = new bootstrap.Modal(document.getElementById('unlock-popup'));
+        unlockModal.show();
+    });
+
+
 });
 

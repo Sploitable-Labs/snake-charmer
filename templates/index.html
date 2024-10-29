@@ -54,6 +54,15 @@
                     </div>
                 </div>
                 {% endfor %}
+
+                <!-- Ninja Placeholder (Grayed Out and Clickable for Popup) -->
+                {% if not session.get('ninja_unlocked', False) %}
+                <div class="category grayed-out" id="ninja-placeholder">
+                    <button class="category-title">
+                        Ninja <i class="fas fa-lock float-end"></i>
+                    </button>
+                </div>
+                {% endif %}
             </aside>
             </div>
 
@@ -219,6 +228,24 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Unlock Popup Modal -->
+    <div id="unlock-popup" class="modal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Unlock the Ninja Category</h5>
+                    <button type="button" class="btn-close" onclick="closePopup()"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Complete all other challenges to unlock the Ninja category!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closePopup()">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Embedding challenges data for JavaScript access -->

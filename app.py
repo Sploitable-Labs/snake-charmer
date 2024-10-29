@@ -70,7 +70,7 @@ def index():
     session['ninja_unlocked'] = ninja_unlocked
 
     # Only send Ninja challenges if they are unlocked
-    ninja_unlocked = True # TESTING ONLY
+    #ninja_unlocked = True # TESTING ONLY
     challenges_to_send = challenges + (ninja_challenges if ninja_unlocked else [])
 
     # Sanitize challenges data

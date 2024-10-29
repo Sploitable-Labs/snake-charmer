@@ -591,3 +591,8 @@ ul, ol {padding: 0px; margin: 0;}
 .output-area {
     margin-top: 0 !important;
 }
+
+.grayed-out {
+    opacity: 0.5;
+}
+
