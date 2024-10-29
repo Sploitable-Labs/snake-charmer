@@ -126,7 +126,8 @@ def submit_result():
         "completed_challenges": user_data['completed_challenges'],
         "challenge_score": final_score,
         "passed_tests": passed_tests,
-        "total_tests": len(expected_outputs)
+        "total_tests": len(expected_outputs),
+        "ninja_unlocked": ninja_unlocked,
     })
 
 

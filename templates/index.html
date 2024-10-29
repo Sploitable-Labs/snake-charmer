@@ -290,11 +290,22 @@
 from browser import document, console, window
 
 # Function to show a modal with specified title, message, and icon
-def show_modal(title, message, icon_class):
+def show_modal(title, message, icon_class, on_close=None):
     document["notificationModalLabel"].text = title
     document["modal-message"].text = message
     document["modal-icon"].className = icon_class
     window.bootstrap.Modal.new(document["notificationModal"]).show()
+
+    # If there's a callback provided, set it to execute on modal hide
+    if on_close:
+        def handle_hidden(event):
+            # Execute callback after the modal is fully hidden
+            on_close()
+            # Remove event listener to avoid duplicate calls
+            document.getElementById('notificationModal').removeEventListener("hidden.bs.modal", handle_hidden)
+
+        # Add event listener for when modal is hidden
+        document.getElementById('notificationModal').addEventListener("hidden.bs.modal", handle_hidden)
 
 # Function to fetch arguments from the server
 def fetch_arguments(callback):
@@ -387,8 +398,25 @@ def submit_results(results):
         try:
             response_data = window.JSON.parse(req.responseText)  # Use responseText instead of text
             if response_data["success"]:  # Access properties directly
-                show_modal("Congratulations!", f"Challenge completed! You earned {response_data['challenge_score']} points.", "fas fa-trophy text-success")
                 
+                # Check if Ninja category is unlocked
+                if response_data["ninja_unlocked"]:
+                    # Show modal with a callback to reload the page after dismissal
+                    show_modal(
+                        "Congratulations!",
+                        f"Challenge completed! You earned {response_data['challenge_score']} points.",
+                        "fas fa-trophy text-success",
+                        on_close=lambda: window.location.reload()  # Callback to reload the page
+                    )
+                else:
+                    # Show modal without a reload callback
+                    show_modal(
+                        "Congratulations!",
+                        f"Challenge completed! You earned {response_data['challenge_score']} points.",
+                        "fas fa-trophy text-success"
+                    )
+
+
                 # Update client-side user_data with latest score and completed challenges
                 window.user_data["score"] = response_data["score"]
                 window.user_data["completed_challenges"] = response_data["completed_challenges"]
