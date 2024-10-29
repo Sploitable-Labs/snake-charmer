@@ -402,13 +402,20 @@ def submit_results(results):
                 
                 # Check if Ninja category is unlocked
                 if response_data["ninja_unlocked"]:
-                    # Show modal with a callback to reload the page after dismissal
-                    show_modal(
-                        "Congratulations!",
-                        f"Challenge completed! You earned {response_data['challenge_score']} points.",
-                        "fas fa-trophy text-success",
-                        on_close=lambda: window.location.reload()  # Callback to reload the page
-                    )
+
+                    # Check if the ninja challenge is already unlocked
+                    if "ninja_challenege" not in window.user_data:
+
+                        # Set flag to indicate the ninja challenge is now unlocked
+                        window.user_data["ninja_challenge"] = True
+
+                        # Show modal with a callback to reload the page after dismissal
+                        show_modal(
+                            "Congratulations!",
+                            f"Challenge completed! You earned {response_data['challenge_score']} points.",
+                            "fas fa-trophy text-success",
+                            on_close=lambda: window.location.reload()  # Callback to reload the page
+                        )
                 else:
                     # Show modal without a reload callback
                     show_modal(
