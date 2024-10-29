@@ -17,10 +17,12 @@ app.config.update(
 
 # Load all challenges from JSON files at startup
 challenges = []
+ninja_challenges = []
 
 def load_all_challenges():
-    global challenges
-    challenges.clear()  # Clear existing data if reloading
+    global challenges, ninja_challenges
+    challenges.clear()
+    ninja_challenges.clear()
 
     challenges_dir = os.path.join(app.root_path, 'data/challenges')
     all_challenges = []
@@ -29,18 +31,18 @@ def load_all_challenges():
     for filepath in glob(os.path.join(challenges_dir, '*.json')):
         with open(filepath, 'r') as file:
             data = json.load(file)
-            all_challenges.extend(data)  # Assuming each JSON file contains a list of challenges
+            all_challenges.extend(data)
 
-    # Assign a unique ID to each challenge
+    # Split challenges into regular and Ninja categories
     for index, challenge in enumerate(all_challenges, start=1):
-        challenge['id'] = index  # Assign IDs sequentially
-    challenges.extend(all_challenges)
+        challenge['id'] = index
+        challenge['hint_count'] = len(challenge.get('hints', []))
+        if challenge['category'] == 'Ninja':
+            ninja_challenges.append(challenge)
+        else:
+            challenges.append(challenge)
 
-    # Add `hint_count` dynamically for each challenge
-    for challenge in challenges:
-        challenge['hint_count'] = len(challenge.get('hints', []))  # Count hints if available
-
-    return challenges
+load_all_challenges()
 
 @app.template_filter('sort_ninja_last')
 def sort_ninja_last(categories):
@@ -50,17 +52,28 @@ def sort_ninja_last(categories):
 
 @app.route('/')
 def index():
-    session.permanent = True  # Make the session permanent to store data for a long time
-    load_all_challenges()
+    session.permanent = True
 
-    # Initialize user_data in session if it doesn't exist
+    # Initialize user data in session if it doesn't exist
     if 'user_data' not in session:
         session['user_data'] = {
             'score': 0,
             'completed_challenges': []
         }
 
-    # Prepare sanitized challenges for the frontend
+    # Check if all challenges are completed (excluding Ninja)
+    regular_challenge_ids = {c['id'] for c in challenges}
+    completed_challenges = set(session['user_data']['completed_challenges'])
+
+    # Unlock Ninja if all regular challenges are completed
+    ninja_unlocked = regular_challenge_ids.issubset(completed_challenges)
+    session['ninja_unlocked'] = ninja_unlocked
+
+    # Only send Ninja challenges if they are unlocked
+    ninja_unlocked = True # TESTING ONLY
+    challenges_to_send = challenges + (ninja_challenges if ninja_unlocked else [])
+
+    # Sanitize challenges data
     sanitized_challenges = [
         {
             "id": challenge["id"],
@@ -71,10 +84,57 @@ def index():
             "instructions": challenge["instructions"],
             "hint_count": challenge["hint_count"]
         }
-        for challenge in challenges
+        for challenge in challenges_to_send
     ]
 
     return render_template('index.html', challenges=sanitized_challenges, user_data=session['user_data'])
+
+
+@app.route('/submit_results', methods=['POST'])
+def submit_result():
+    data = request.json
+    challenge_id = data.get('challenge_id')
+    results = data.get('results')
+
+    # Find the challenge by ID
+    challenge = next((c for c in challenges + ninja_challenges if c['id'] == int(challenge_id)), None)
+
+    if not challenge:
+        return jsonify({"success": False, "message": "Challenge not found."})
+
+    # Check results
+    expected_outputs = [test_case['expected_output'] for test_case in challenge['test_cases']]
+    passed_tests = sum(1 for result, expected in zip(results, expected_outputs) if result == expected)
+
+    # Determine if fully passed
+    success = passed_tests == len(expected_outputs)
+    base_score = challenge['score']
+    used_hints = session.get('used_hints', {}).get(str(challenge_id), [])
+    total_penalty = sum(challenge['hints'][i]['penalty'] for i in used_hints)
+    final_score = max(base_score - total_penalty, 0) if success else 0
+
+    user_data = session.get('user_data', {'score': 0, 'completed_challenges': []})
+
+    # Update score and completed challenges
+    if success and challenge_id not in user_data['completed_challenges']:
+        user_data['completed_challenges'].append(challenge_id)
+        user_data['score'] += final_score
+        session['user_data'] = user_data
+
+    # Check for Ninja unlock
+    regular_challenge_ids = {c['id'] for c in challenges}
+    if regular_challenge_ids.issubset(set(user_data['completed_challenges'])):
+        session['ninja_unlocked'] = True
+
+    return jsonify({
+        "success": success,
+        "message": f"{passed_tests}/{len(expected_outputs)} tests passed.",
+        "score": user_data['score'],
+        "completed_challenges": user_data['completed_challenges'],
+        "challenge_score": final_score,
+        "passed_tests": passed_tests,
+        "total_tests": len(expected_outputs)
+    })
 
 
 @app.route('/get_test_arguments', methods=['GET'])
@@ -90,59 +150,6 @@ def get_test_arguments():
     # Return only the inputs for test cases, not the expected outputs
     test_arguments = [test_case['input'] for test_case in challenge['test_cases']]
     return jsonify({"success": True, "test_arguments": test_arguments})
-
-import json
-from flask import request, jsonify, session
-
-@app.route('/submit_results', methods=['POST'])
-def submit_result():
-    """Endpoint to receive the list of results from the user's code execution."""
-    data = request.json
-    challenge_id = data.get('challenge_id')
-    results = data.get('results')  # List of results from user's code
-    
-    # Find the challenge by ID to access expected outputs and score
-    challenge = next((c for c in challenges if c['id'] == int(challenge_id)), None)
-
-    if not challenge:
-        return jsonify({"success": False, "message": "Challenge not found."})
-
-    # Check if the user's results match the expected outputs
-    expected_outputs = [test_case['expected_output'] for test_case in challenge['test_cases']]
-    passed_tests = sum(1 for result, expected in zip(results, expected_outputs) if result == expected)
-
-    # Determine if the challenge is fully passed
-    success = passed_tests == len(expected_outputs)
-    base_score = challenge['score']  # Base score defined in the JSON
-
-    # Calculate penalties based on hints used
-    used_hints = session.get('used_hints', {}).get(challenge_id, set())
-    total_penalty = sum(challenge['hints'][i]['penalty'] for i in used_hints)
-
-    # Adjust final score if the challenge is successfully completed
-    final_score = max(base_score - total_penalty, 0) if success else 0
-
-    # Initialize session data if it doesn't exist
-    user_data = session.get('user_data', {'score': 0, 'completed_challenges': []})
-
-    # Update user score and completed challenges only if challenge is successfully passed
-    if success and challenge_id not in user_data['completed_challenges']:
-        user_data['completed_challenges'].append(challenge_id)
-        user_data['score'] += final_score  # Add the adjusted score
-        session['user_data'] = user_data  # Update session with new user_data
-
-    # Prepare the response message
-    message = f"{passed_tests}/{len(expected_outputs)} tests passed."
-    
-    return jsonify({
-        "success": success,
-        "message": message,
-        "score": user_data['score'],
-        "completed_challenges": user_data['completed_challenges'],
-        "challenge_score": final_score,  # Return the score for this challenge after penalties
-        "passed_tests": passed_tests,
-        "total_tests": len(expected_outputs)
-    })
 
 @app.route("/get_hint", methods=["POST"])
 def get_hint():
