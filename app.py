@@ -61,16 +61,10 @@ def index():
             'completed_challenges': []
         }
 
-    # Check if all challenges are completed (excluding Ninja)
-    regular_challenge_ids = {c['id'] for c in challenges}
-    completed_challenges = set(session['user_data']['completed_challenges'])
-
-    # Unlock Ninja if all regular challenges are completed
-    ninja_unlocked = regular_challenge_ids.issubset(completed_challenges)
+    ninja_unlocked = session['user_data']['score'] >= 10
     session['ninja_unlocked'] = ninja_unlocked
 
     # Only send Ninja challenges if they are unlocked
-    #ninja_unlocked = True # TESTING ONLY
     challenges_to_send = challenges + (ninja_challenges if ninja_unlocked else [])
 
     # Sanitize challenges data
@@ -122,9 +116,8 @@ def submit_result():
         session['user_data'] = user_data
 
     # Check for Ninja unlock
-    regular_challenge_ids = {c['id'] for c in challenges}
-    if regular_challenge_ids.issubset(set(user_data['completed_challenges'])):
-        session['ninja_unlocked'] = True
+    ninja_unlocked = session['user_data']['score'] >= 10
+    session['ninja_unlocked'] = ninja_unlocked
 
     return jsonify({
         "success": success,

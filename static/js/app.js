@@ -200,11 +200,21 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Attach event listener to the Ninja placeholder button
-    document.getElementById('ninja-placeholder').addEventListener('click', () => {
-        const unlockModal = new bootstrap.Modal(document.getElementById('unlock-popup'));
-        unlockModal.show();
+    const ninjaPlaceholder = document.getElementById("ninja-placeholder");
+    if (ninjaPlaceholder) {
+        ninjaPlaceholder.addEventListener('click', () => {
+            const unlockModal = new bootstrap.Modal(document.getElementById('unlock-popup'));
+            unlockModal.show();
+        });
+    } else {
+        console.error("Ninja placeholder not found.");
+    }
+
+    document.getElementById('close-unlock-modal').addEventListener('click', () => {
+        const unlockModal = bootstrap.Modal.getInstance(document.getElementById('unlock-popup'));
+        unlockModal.hide();
     });
 
-
 });
+
 
