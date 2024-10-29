@@ -596,3 +596,23 @@ ul, ol {padding: 0px; margin: 0;}
     opacity: 0.5;
 }
 
+.star-icon {
+    position: relative;
+    display: inline-block;
+}
+
+.star-icon:hover {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}

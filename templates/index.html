@@ -28,7 +28,7 @@
 
         <!-- Score positioned on top-right with padding -->
         <div id="score-banner" class="position-absolute" style="right: 2rem;">
-            <i class="fas fa-star"></i> <span id="score">{{ user_data.score }}</span>
+            <i class="fas fa-star star-icon"></i> <span id="score">{{ user_data.score }}</span>
         </div>
     </header>
     
@@ -235,11 +235,12 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Unlock the Ninja Category</h5>
+                    <h5 class="modal-title">Ninja Challenge</h5>
                     <button type="button" class="btn-close" onclick="closePopup()"></button>
                 </div>
-                <div class="modal-body">
-                    <p>To unlock the Ninja category you require a score of at least 500 points.</p>
+                <div class="modal-body text-center">
+                    <i id="ninja-modal-icon" class="fas fa-user-ninja fa-3x"></i>
+                    <p>To unlock the ninja challenge you need at least 500 points.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" id="close-unlock-modal">Close</button>
