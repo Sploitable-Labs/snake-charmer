@@ -1,1 +1,7 @@
 flask
+waitress
+colorama
+pyinstaller
+cryptography
+cython
+setuptools
