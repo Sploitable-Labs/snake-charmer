@@ -19,6 +19,8 @@ app.config.update(
 challenges = []
 ninja_challenges = []
 
+ninja_unlock_threshold = 500
+
 def load_all_challenges():
     global challenges, ninja_challenges
     challenges.clear()
@@ -61,7 +63,7 @@ def index():
             'completed_challenges': []
         }
 
-    ninja_unlocked = session['user_data']['score'] >= 10
+    ninja_unlocked = session['user_data']['score'] >= ninja_unlock_threshold
     session['ninja_unlocked'] = ninja_unlocked
 
     # Only send Ninja challenges if they are unlocked
@@ -116,7 +118,7 @@ def submit_result():
         session['user_data'] = user_data
 
     # Check for Ninja unlock
-    ninja_unlocked = session['user_data']['score'] >= 10
+    ninja_unlocked = session['user_data']['score'] >= ninja_unlock_threshold
     session['ninja_unlocked'] = ninja_unlocked
 
     return jsonify({
