@@ -290,6 +290,9 @@
 <script type="text/python">
 from browser import document, console, window
 
+# sounds
+success_sound = window.Audio.new("/static/sounds/success.mp3")
+
 # Function to show a modal with specified title, message, and icon
 def show_modal(title, message, icon_class, on_close=None):
     document["notificationModalLabel"].text = title
@@ -416,6 +419,9 @@ def submit_results(results):
                             "fas fa-trophy text-success",
                             on_close=lambda: window.location.reload()  # Callback to reload the page
                         )
+
+                        # Play ninja sound
+                        success_sound.play()
                 else:
                     # Show modal without a reload callback
                     show_modal(
@@ -423,6 +429,8 @@ def submit_results(results):
                         f"Challenge completed! You earned {response_data['challenge_score']} points.",
                         "fas fa-trophy text-success"
                     )
+                    # Play success sound
+                    success_sound.play()
 
 
                 # Update client-side user_data with latest score and completed challenges

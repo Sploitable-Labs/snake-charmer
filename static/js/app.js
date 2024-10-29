@@ -1,3 +1,5 @@
+// Load sound file
+
 document.addEventListener('DOMContentLoaded', function () {
     const editor = ace.edit("code-editor");
     window.editor = editor;  // Make the editor accessible globally
