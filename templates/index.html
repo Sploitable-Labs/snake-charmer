@@ -389,6 +389,8 @@ def run_user_code(event):
             else:
                 output_area.text = "Error: Function 'foo' not found in code."
 
+                # Play error sound
+                error_sound.play()
 
         except Exception as e:
             output_area.text = f"Error: {str(e)}"
