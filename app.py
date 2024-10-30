@@ -19,7 +19,7 @@ app.config.update(
 challenges = []
 ninja_challenges = []
 
-ninja_unlock_threshold = 500
+ninja_unlock_threshold = -1
 
 def load_all_challenges():
     global challenges, ninja_challenges
@@ -137,7 +137,7 @@ def submit_result():
 def get_test_arguments():
     """Endpoint to fetch test arguments for a specific challenge."""
     challenge_id = request.args.get('challenge_id', type=int)
-    challenge = next((c for c in challenges if c['id'] == challenge_id), None)
+    challenge = next((c for c in challenges + ninja_challenges if c['id'] == challenge_id), None)
     
     if not challenge:
         return jsonify({"success": False, "message": "Challenge not found."})

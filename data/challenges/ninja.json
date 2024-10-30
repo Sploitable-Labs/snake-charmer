@@ -20,7 +20,7 @@
         "category": "Ninja",
         "difficulty": "Hard",
         "score": 50,
-        "instructions": "The force is strong with this one. Use you previous answer as your starting point",
+        "instructions": "The force is strong with this one. Use your previous answer as your starting point",
         "hints": [
             {"text": "There is a way out of every box, a solution to every puzzle; it's just a matter of finding it.", "penalty": 0}
         ],
