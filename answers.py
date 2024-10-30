@@ -65,6 +65,10 @@ def foo(dictionary):
 
 ## Lists
 
+#Sum
+def foo(numbers):
+    return sum(numbers)
+
 #MinNumber
 def foo(numbers):
     if not numbers:  # Check if the list is empty

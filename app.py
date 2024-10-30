@@ -19,7 +19,7 @@ app.config.update(
 challenges = []
 ninja_challenges = []
 
-ninja_unlock_threshold = 500
+ninja_unlock_threshold = 10
 
 def load_all_challenges():
     global challenges, ninja_challenges
@@ -151,10 +151,12 @@ def get_test_arguments():
 def get_hint():
     data = request.json
     challenge_id = data.get("challenge_id")
-    hint_index = data.get("hint_index")
+    hint_index = data.get("hint_index")    
+
+    # Find the challenge by ID
+    challenge = next((c for c in challenges + ninja_challenges if c["id"] == challenge_id), None)
 
     # Validate challenge and hint index
-    challenge = challenges[challenge_id - 1]
     if not challenge or hint_index >= len(challenge["hints"]):
         return jsonify({"error": "Invalid challenge or hint index"}), 400
 
