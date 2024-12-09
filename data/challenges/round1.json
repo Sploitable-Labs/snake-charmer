@@ -5,6 +5,7 @@
         "category": "Conditionals",
         "difficulty": "Easy",
         "score": 15,
+        "type": "code",
         "instructions": "Write a function called 'foo' that takes an integer and returns 'Even' if it's even, and 'Odd' if it's odd.",
         "hints": [
             {"text": "Use the modulus operator (%) to check for evenness.", "penalty": 3},
@@ -21,6 +22,7 @@
         "category": "Conditionals",
         "difficulty": "Hard",
         "score": 30,
+        "type": "code",
         "instructions": "Write a function called 'foo' that takes a number and returns a list. The list elements should be 'Fizz' for multiples of 3, 'Buzz' for multiple of 5, and 'FizzBuzz' for multiples of both. All other numbers should be returned as strings.",
         "hints": [
             {"text": "Use % to check divisibility by 3 and 5.", "penalty": 5},
@@ -29,6 +31,51 @@
         "test_cases": [
             {"input": [5], "expected_output": ["1", "2", "Fizz", "4", "Buzz"]},
             {"input": [15], "expected_output": ["1", "2", "Fizz", "4", "Buzz", "Fizz", "7", "8", "Fizz", "Buzz", "11", "Fizz", "13", "14", "FizzBuzz"]}
+        ]
+    },
+    {
+        "id": 20,
+        "name": "Analyze the Image",
+        "category": "General",
+        "difficulty": "Medium",
+        "score": 25,
+        "type": "image",
+        "instructions": "Examine the image below and identify the object in the picture.",
+        "media": "/static/images/object.jpg",
+        "answer": "Tree",
+        "hints": [
+            {"text": "Focus on the shape and size of the object.", "penalty": 3},
+            {"text": "It is commonly found in forests.", "penalty": 2}
+        ]
+    },
+    {
+        "id": 21,
+        "name": "Guess the Sound",
+        "category": "General",
+        "difficulty": "Medium",
+        "score": 20,
+        "type": "audio",
+        "instructions": "Listen to the audio and guess the animal making the sound.",
+        "media": "/static/sound/ninja_unlock.mp3",
+        "answer": "Dog",
+        "hints": [
+            {"text": "The animal is a common pet.", "penalty": 3},
+            {"text": "It barks.", "penalty": 2}
+        ]
+    },
+    {
+        "id": 22,
+        "name": "Watch and Learn",
+        "category": "General",
+        "difficulty": "Hard",
+        "score": 30,
+        "type": "video",
+        "instructions": "Watch the video and answer the question about the content.",
+        "media": "/static/videos/example.mp4",
+        "answer": "Physics",
+        "hints": [
+            {"text": "The topic involves science.", "penalty": 5},
+            {"text": "It's about motion and forces.", "penalty": 3}
         ]
     }
 ]
