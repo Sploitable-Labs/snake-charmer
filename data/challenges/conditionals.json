@@ -21,7 +21,7 @@
         "category": "Conditionals",
         "difficulty": "Hard",
         "score": 30,
-        "instructions": "Write a function called 'foo' that returns 'Fizz', 'Buzz', or 'FizzBuzz' based on divisibility.",
+        "instructions": "Write a function called 'foo' that takes a number and returns a list. The list elements should be 'Fizz' for multiples of 3, 'Buzz' for multiple of 5, and 'FizzBuzz' for multiples of both. All other numbers should be returned as strings.",
         "hints": [
             {"text": "Use % to check divisibility by 3 and 5.", "penalty": 5},
             {"text": "Use if statements to check conditions in the order: FizzBuzz, Fizz, Buzz.", "penalty": 3}

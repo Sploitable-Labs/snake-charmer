@@ -1,7 +1,7 @@
 python -m venv venv
 . .\venv\Scripts\Activate
 
-pip install --upgrade pip
+python.exe -m pip install --upgrade pip
 pip install -r requirements.txt
 
-#python .\app.py
+python .\app.py
