@@ -75,7 +75,9 @@ def index():
             "difficulty": challenge["difficulty"],
             "score": challenge["score"],
             "instructions": challenge["instructions"],
-            "hint_count": challenge["hint_count"]
+            "hint_count": challenge["hint_count"],
+            "type": challenge.get("type", "code"),  # Ensure the 'type' is included
+            "media": challenge.get("media", None)   # Include 'media' for non-code challenges
         }
         for challenge in challenges_to_send
     ]

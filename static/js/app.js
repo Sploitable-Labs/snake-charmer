@@ -53,7 +53,8 @@ document.addEventListener('DOMContentLoaded', function () {
     
             if (currentChallenge) {
                 const type = currentChallenge.type || "code"; // Default to 'code'
-    
+                console.log("Challenge type:", type);
+
                 // Update UI for the selected challenge
                 document.getElementById('challenge-title').textContent = currentChallenge.name;
                 document.getElementById('instructions-text').innerHTML = `<p>${currentChallenge.instructions}</p>`;
@@ -66,8 +67,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 inputContainer.innerHTML = "";
     
                 if (type === "code") {
+                    console.log("Show editor...");
                     showCodeEditor();
                 } else {
+                    console.log("Hide editor...");
                     hideCodeEditor(); // Hide the code editor for non-code challenges
                     loadChallengeMedia(type, currentChallenge.media);
                     setupInputField(type);

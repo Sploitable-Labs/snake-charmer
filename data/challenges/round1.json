@@ -56,7 +56,7 @@
         "score": 20,
         "type": "audio",
         "instructions": "Listen to the audio and guess the animal making the sound.",
-        "media": "/static/sound/ninja_unlock.mp3",
+        "media": "/static/sounds/ninja_unlock.mp3",
         "answer": "Dog",
         "hints": [
             {"text": "The animal is a common pet.", "penalty": 3},
