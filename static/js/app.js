@@ -47,42 +47,62 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Attach event listeners to each challenge button
     challengeButtons.forEach(button => {
-        button.addEventListener('click', function () {
+        button.addEventListener('click', async function () {
+            console.log("Challenge button clicked:", this.dataset.id);
+    
+            // Add visual indicators and setup editor
+            computerFrame.classList.add('challenge-selected', 'computer-on');
+            computerFrame.classList.remove('computer-off'); // Remove the "computer-off" state
+    
+            // Remove 'active-challenge' class from all buttons
+            challengeButtons.forEach(btn => btn.classList.remove('active-challenge'));
+            this.classList.add('active-challenge');
+    
+            // Load challenge details
             const challengeId = parseInt(this.dataset.id);
             currentChallenge = challengeData.find(c => c.id === challengeId);
     
             if (currentChallenge) {
                 const type = currentChallenge.type || "code"; // Default to 'code'
-                console.log("Challenge type:", type);
-
-                // Update UI for the selected challenge
+                console.log("Selected Challenge Type:", type);
+    
+                // Update UI elements
                 document.getElementById('challenge-title').textContent = currentChallenge.name;
                 document.getElementById('instructions-text').innerHTML = `<p>${currentChallenge.instructions}</p>`;
-                availableScore = currentChallenge.score;
-                updateAvailableScore();
+    
                 resetHints();
+                setupHints(currentChallenge);
     
-                // Reset media and input areas
-                mediaContainer.innerHTML = "";
-                inputContainer.innerHTML = "";
+                // Clear previous content
+                const mediaContainer = document.getElementById("challenge-media");
+                const inputContainer = document.getElementById("input-container");
+                const outputArea = document.getElementById("output");
     
+                mediaContainer.innerHTML = ""; // Clear previous media
+                inputContainer.innerHTML = ""; // Clear input field
+                if (outputArea) outputArea.innerHTML = ""; // Clear output area
+    
+                // Handle different challenge types
                 if (type === "code") {
-                    console.log("Show editor...");
                     showCodeEditor();
+                    submitButton.removeAttribute('disabled');
                 } else {
-                    console.log("Hide editor...");
-                    hideCodeEditor(); // Hide the code editor for non-code challenges
+                    hideCodeEditor();
                     loadChallengeMedia(type, currentChallenge.media);
                     setupInputField(type);
                 }
     
-                setupHints(currentChallenge);
+                // Update the Brython `challenge_id` variable using `window`
+                window.challenge_id = challengeId; // Setting globally for Brython
+    
+                // Update the available score
+                availableScore = currentChallenge.score;
+                updateAvailableScore();
             } else {
                 console.error("Challenge not found:", challengeId);
             }
         });
     });
-    
 
     // Functions to show/hide elements based on challenge type
     function showCodeEditor() {
