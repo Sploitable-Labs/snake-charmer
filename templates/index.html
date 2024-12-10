@@ -291,7 +291,7 @@
 <script type="text/python">
 from browser import document, console, window
 
-# sounds
+# Sounds
 success_sound = window.Audio.new("/static/sounds/success.mp3")
 fail_sound = window.Audio.new("/static/sounds/fail.mp3")
 error_sound = window.Audio.new("/static/sounds/error.mp3")
@@ -299,36 +299,37 @@ hint_sound = window.Audio.new("/static/sounds/hint.mp3")
 ninja_unlock_sound = window.Audio.new("/static/sounds/ninja_unlock.mp3")
 ninja_success_sound = window.Audio.new("/static/sounds/ninja_success.mp3")
 
-# Function to show a modal with specified title, message, and icon
+# Function to show a modal
 def show_modal(title, message, icon_class, on_close=None):
     document["notificationModalLabel"].text = title
     document["modal-message"].text = message
     document["modal-icon"].className = icon_class
     window.bootstrap.Modal.new(document["notificationModal"]).show()
 
-    # If there's a callback provided, set it to execute on modal hide
     if on_close:
         def handle_hidden(event):
-            # Execute callback after the modal is fully hidden
             on_close()
-            # Remove event listener to avoid duplicate calls
             document.getElementById('notificationModal').removeEventListener("hidden.bs.modal", handle_hidden)
 
-        # Add event listener for when modal is hidden
         document.getElementById('notificationModal').addEventListener("hidden.bs.modal", handle_hidden)
 
-# Function to fetch arguments from the server
+# Function to fetch arguments (only for code challenges)
 def fetch_arguments(callback):
-    challenge_id = window.challenge_id
+    console.log("Fetching arguments.")
 
+    if window.current_challenge.get("type", "code") != "code":
+        console.log("Non-code challenge, skipping fetch_arguments.")
+        return
+
+    challenge_id = window.challenge_id
     if not challenge_id:
         console.log("No challenge selected.")
         return
 
     def on_complete(req):
+        console.log("Request complete.")
         try:
             response_data = window.JSON.parse(req.responseText)
-
             if response_data["success"]:
                 test_arguments = response_data["test_arguments"]
                 callback(test_arguments)
@@ -342,34 +343,26 @@ def fetch_arguments(callback):
     req.bind('load', lambda _: on_complete(req))
     req.send()
 
-def is_iterable(obj):
-    try:
-        iter(obj)  # Attempt to get an iterator from the object
-        return True
-    except TypeError:  # If it raises TypeError, it's not iterable
-        return False
-
-def convert_test_cases(js_test_cases):
-    num_test_cases = len(js_test_cases)
-    test_cases = []
-    for idx in range(num_test_cases):
-        js_test_case = js_test_cases[idx]
-        test_case = []
-        for js_arg in js_test_case:
-            if is_iterable(js_arg) and not isinstance(js_arg, str) and not isinstance(js_arg, list):
-                arg = dict(js_arg)
-            else:
-                arg = js_arg
-            test_case.append(arg)
-        test_cases.append(test_case)
-    return test_cases
-
-# Function to run user code with fetched arguments
+# Function to run user code or process non-code challenges
 def run_user_code(event):
+    console.log("Running user code.")
     challenge_id = window.challenge_id
     if not challenge_id:
         show_modal("Warning", "Please select a challenge.", "fas fa-exclamation-triangle text-warning")
         return
+
+    console.log("dbg 1")
+    console.log(window.current_challenge)
+    challenge_type = window.current_challenge["type"] if "type" in window.current_challenge else "code"
+    console.log("dbg 2")
+    if challenge_type == "code":
+        run_code_challenge()
+    else:
+        run_non_code_challenge()
+
+# Function to run code challenges
+def run_code_challenge():
+    console.log("Running code challenge.")
 
     user_code = window.editor.getValue()
     output_area = document["output"]
@@ -377,6 +370,7 @@ def run_user_code(event):
     local_scope = {}
 
     def execute_with_arguments(js_test_cases):
+        console.log("Executing code with arguments.")
         try:
             exec(user_code, {}, local_scope)
             if 'foo' in local_scope:
@@ -389,148 +383,85 @@ def run_user_code(event):
                 submit_results(results)
             else:
                 output_area.text = "Error: Function 'foo' not found in code."
-
-                # Play error sound
                 error_sound.play()
 
         except Exception as e:
             output_area.text = f"Error: {str(e)}"
-
-            # Play error sound
             error_sound.play()
 
     fetch_arguments(execute_with_arguments)
 
-# Updated function to submit execution results to the server and handle response
-def submit_results(results):
+# Function to handle non-code challenges
+def run_non_code_challenge():
+    console.log("Running non-code challenge.")
+    user_response = document["user-response"].value.strip().lower()
+    if not user_response:
+        show_modal("Error", "Please enter a response.", "fas fa-times-circle text-danger")
+        return
+
+    # Submit the response to the server
+    submit_results(user_response=user_response)
+
+# Function to submit results
+def submit_results(results=None, user_response=None):
+    console.log("Submitting results.")
     challenge_id = window.challenge_id
 
-    # Prepare data as JSON to submit only the results and challenge details
-    data = window.JSON.stringify({
+    data = {
         "challenge_id": challenge_id,
-        "results": results,
-    })
+    }
+    if results:
+        data["results"] = results
+    if user_response:
+        data["user_answer"] = user_response
 
     def on_success(req):
         try:
-            response_data = window.JSON.parse(req.responseText)  # Use responseText instead of text
-            if response_data["success"]:  # Access properties directly
-                
-                # Check if Ninja category is unlocked
-                if response_data["ninja_unlocked"]:
-
-                    # Check if the ninja challenge is already unlocked
-                    if "ninja_challenege" not in window.user_data:
-
-                        # Set flag to indicate the ninja challenge is now unlocked
-                        window.user_data["ninja_challenge"] = True
-
-                        # Show modal with a callback to reload the page after dismissal
-                        show_modal(
-                            "おめでとう!",
-                            f"You have unlocked the ninja challenge!",
-                            "fas fa-user-ninja text-success",
-                            on_close=lambda: window.location.reload()  # Callback to reload the page
-                        )
-
-                        # Play ninja sound
-                        ninja_unlock_sound.play()
-                else:
-                    # Show modal without a reload callback
-                    show_modal(
-                        "Congratulations!",
-                        f"Challenge completed! You earned {response_data['challenge_score']} points.",
-                        "fas fa-trophy text-success"
-                    )
-
-                    # Play success sound
-                    success_sound.play()
-
-
-                # Update client-side user_data with latest score and completed challenges
-                window.user_data["score"] = response_data["score"]
-                window.user_data["completed_challenges"] = response_data["completed_challenges"]
-
-                active_challenge = document.querySelector('.challenge-btn.active-challenge')
-                if active_challenge and not active_challenge.select_one('.tick-mark'):
-                    active_challenge.innerHTML += ' <i class="fas fa-check-circle tick-mark"></i>'
-                
-                document["score"].text = str(response_data["score"])
-
-                # Reset available score to zero in the DOM
-                document["available-score"].text = "0"
-
-                # Disable the submit button
-                document["submit-btn"].disabled = True
-
-                # Select all elements with the class "hint-btn"
-                hint_buttons = document.select(".hint-btn")
-
-                # Loop through each button and set disabled to True
-                for button in hint_buttons:
-                    button.disabled = True
-
+            response_data = window.JSON.parse(req.responseText)
+            if response_data["success"]:
+                show_modal(
+                    "Congratulations!",
+                    f"You earned {response_data['challenge_score']} points.",
+                    "fas fa-trophy text-success"
+                )
+                success_sound.play()
+                update_ui_on_success(response_data)
             else:
-                failure_messages = [
-                    "Oops! Better luck next time.",
-                    "Close, but not quite!",
-                    "Almost there! Keep trying!",
-                    "Hmm... something went awry!"
-                ]
-                random_index = int(window.Math.random() * len(failure_messages))
-                random_message = failure_messages[random_index]
-
-                show_modal("Try Again!", random_message, "fas fa-times-circle text-danger")
-
-                # Play fail sound
+                show_modal("Try Again!", "Incorrect response. Please try again.", "fas fa-times-circle text-danger")
                 fail_sound.play()
-
-        except Exception as e:           
+        except Exception as e:
             show_modal("Error", "An error occurred while submitting the results.", "fas fa-exclamation-triangle text-warning")
-            
-            # Play error sound
             error_sound.play()
 
     def on_failure(req):
         console.error("Error submitting results:", req)
         show_modal("Error", "An error occurred while submitting the results.", "fas fa-exclamation-triangle text-warning")
-
-        # Play error sound
         error_sound.play()
 
     req = window.XMLHttpRequest.new()
-    req.bind("load", lambda e: on_success(req) if req.status == 200 else on_failure(req))
     req.open("POST", "/submit_results", True)
-    req.setRequestHeader("Content-Type", "application/json")  # Set header to application/json
-    req.send(data)  # Send JSON data
+    req.setRequestHeader("Content-Type", "application/json")
+    req.send(window.JSON.stringify(data))
 
+# Function to update UI on challenge success
+def update_ui_on_success(response_data):
+    console.log("Updating UI on success.")
+    window.user_data["score"] = response_data["score"]
+    window.user_data["completed_challenges"] = response_data["completed_challenges"]
+    document["score"].text = str(response_data["score"])
+    document["available-score"].text = "0"
+    document["submit-btn"].disabled = True
+    hint_buttons = document.select(".hint-btn")
+    for button in hint_buttons:
+        button.disabled = True
 
-# Function to update available score display (optional if needed for other changes)
-def update_available_score():
-    document["available-score"].text = str(window.availableScore)
-
-# Attach run_user_code to submit button
+# Attach run_user_code to the submit button
 document["submit-btn"].bind("click", run_user_code)
 </script>
 
-
-
-    <script>
-        // JavaScript to set the challenge_id when a challenge is selected
-        document.addEventListener("DOMContentLoaded", function() {
-            const challengeButtons = document.querySelectorAll(".challenge-btn");
-            challengeButtons.forEach(button => {
-                button.addEventListener("click", function() {
-                    challenge_id = this.getAttribute("data-id");
-                });
-            });
-        });
-    </script>
-
-    <script type="text/javascript">
-        window.user_data = {{ user_data | tojson }};
-    </script>
-
+<script type="text/javascript">
+    window.user_data = {{ user_data | tojson }};
+</script>
 
 </body>
 </html>

@@ -46,88 +46,78 @@ document.addEventListener('DOMContentLoaded', function () {
     const challengeButtons = document.querySelectorAll('.challenge-btn');
 
     // Attach event listeners to each challenge button
-    challengeButtons.forEach(button => {
-        button.addEventListener('click', async function () {
-            console.log("Challenge button clicked:", this.dataset.id);
-    
-            // Add visual indicators and setup editor
-            computerFrame.classList.add('challenge-selected', 'computer-on');
-            computerFrame.classList.remove('computer-off'); // Remove the "computer-off" state
-    
-            // Remove 'active-challenge' class from all buttons
-            challengeButtons.forEach(btn => btn.classList.remove('active-challenge'));
-            this.classList.add('active-challenge');
-    
-            // Load challenge details
-            const challengeId = parseInt(this.dataset.id);
-            currentChallenge = challengeData.find(c => c.id === challengeId);
-    
-            if (currentChallenge) {
-                const type = currentChallenge.type || "code"; // Default to 'code'
-                console.log("Selected Challenge Type:", type);
-    
-                // Update UI elements
-                document.getElementById('challenge-title').textContent = currentChallenge.name;
-                document.getElementById('instructions-text').innerHTML = `<p>${currentChallenge.instructions}</p>`;
-    
-                resetHints();
-                setupHints(currentChallenge);
-    
-                // Clear previous content
-                const mediaContainer = document.getElementById("challenge-media");
-                const inputContainer = document.getElementById("input-container");
-                const outputArea = document.getElementById("output");
-    
-                mediaContainer.innerHTML = ""; // Clear previous media
-                inputContainer.innerHTML = ""; // Clear input field
-                if (outputArea) outputArea.innerHTML = ""; // Clear output area
-    
-                // Handle different challenge types
-                if (type === "code") {
-                    showCodeEditor();
-                    submitButton.removeAttribute('disabled');
-                } else {
-                    hideCodeEditor();
-                    loadChallengeMedia(type, currentChallenge.media);
-                    setupInputField(type);
-                }
-    
-                // Update the Brython `challenge_id` variable using `window`
-                window.challenge_id = challengeId; // Setting globally for Brython
-    
-                // Update the available score
-                availableScore = currentChallenge.score;
-                updateAvailableScore();
-            } else {
-                console.error("Challenge not found:", challengeId);
-            }
-        });
-    });
+// Attach event listeners to each challenge button
+challengeButtons.forEach(button => {
+    button.addEventListener('click', async function () {
+        console.log("Challenge button clicked:", this.dataset.id);
 
-    // Functions to show/hide elements based on challenge type
+        // Switch on the simulated computer
+        computerFrame.classList.add('challenge-selected', 'computer-on');
+        computerFrame.classList.remove('computer-off'); // Remove the "computer-off" state
+
+        // Remove 'active-challenge' class from all buttons
+        challengeButtons.forEach(btn => btn.classList.remove('active-challenge'));
+        this.classList.add('active-challenge');
+
+        // Load challenge details
+        const challengeId = parseInt(this.dataset.id);
+        window.challenge_id = challengeId; // Set globally for Brython
+        console.log("window.challenge_id:", challengeId);
+
+        const selectedChallenge = challengeData.find(c => c.id === challengeId);
+        if (selectedChallenge) {
+            window.current_challenge = selectedChallenge; // Set for Brython
+            console.log("window.current_challenge:", selectedChallenge);
+
+            const type = selectedChallenge.type || "code"; // Default to 'code'
+            console.log("Selected Challenge Type:", type);
+
+            // Update UI elements
+            document.getElementById('challenge-title').textContent = selectedChallenge.name;
+            document.getElementById('instructions-text').innerHTML = `<p>${selectedChallenge.instructions}</p>`;
+
+            resetHints();
+            setupHints(selectedChallenge);
+
+            // Clear previous content
+            mediaContainer.innerHTML = ""; // Clear previous media
+            inputContainer.innerHTML = ""; // Clear input field
+            if (outputArea) outputArea.innerHTML = ""; // Clear output area
+
+            // Handle different challenge types
+            if (type === "code") {
+                showCodeEditor();
+            } else {
+                hideCodeEditor();
+                loadChallengeMedia(type, selectedChallenge.media);
+                setupInputField(type);
+            }
+
+            // Enable the submit button for all challenge types
+            submitButton.removeAttribute('disabled');
+
+            // Update the available score
+            availableScore = selectedChallenge.score;
+            updateAvailableScore();
+        } else {
+            console.error("Challenge not found:", challengeId);
+        }
+    });
+});
+
     function showCodeEditor() {
         document.querySelector(".code-editor-container").style.display = "block";
         outputArea.style.display = "block";
-        submitButton.style.display = "block";
         editor.setReadOnly(false);
     }
 
     function hideCodeEditor() {
         const codeEditorContainer = document.querySelector(".code-editor-container");
         const outputArea = document.querySelector(".output-area");
-        const submitButton = document.getElementById("submit-btn");
     
-        if (codeEditorContainer) {
-            codeEditorContainer.style.display = "none";
-        }
-        if (outputArea) {
-            outputArea.style.display = "none";
-        }
-        if (submitButton) {
-            submitButton.style.display = "none";
-        }
+        if (codeEditorContainer) codeEditorContainer.style.display = "none";
+        if (outputArea) outputArea.style.display = "none";
     }
-    
 
     function loadChallengeMedia(type, mediaPath) {
         if (type === "image") {
@@ -143,42 +133,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (["image", "audio", "video"].includes(type)) {
             inputContainer.innerHTML = `
                 <input type="text" id="user-response" placeholder="Enter your answer" class="form-control">
-                <button id="submit-response" class="btn btn-success mt-3">Submit Answer</button>
             `;
-            document.getElementById("submit-response").addEventListener("click", handleUserResponse);
         }
-    }
-
-    function handleUserResponse() {
-        const userInput = document.getElementById("user-response").value.trim();
-        if (!userInput) {
-            alert("Please enter a response.");
-            return;
-        }
-
-        // Submit the response to the server
-        fetch('/submit_results', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                challenge_id: currentChallenge.id, 
-                user_answer: userInput 
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert(`Correct! You earned ${data.challenge_score} points.`);
-            } else {
-                alert("Incorrect. Try again!");
-            }
-            updateAvailableScore();
-        })
-        .catch(error => console.error("Error submitting response:", error));
-    }
-
-    function updateAvailableScore() {
-        availableScoreElement.textContent = availableScore;
     }
 
     function resetHints() {
@@ -225,5 +181,9 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         })
         .catch(error => console.error("Error fetching hint:", error));
+    }
+
+    function updateAvailableScore() {
+        availableScoreElement.textContent = availableScore;
     }
 });
