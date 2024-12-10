@@ -126,11 +126,34 @@ challengeButtons.forEach(button => {
             mediaContainer.innerHTML = `<audio controls><source src="${mediaPath}" type="audio/mpeg">Your browser does not support audio playback.</audio>`;
         } else if (type === "video") {
             mediaContainer.innerHTML = `<video controls><source src="${mediaPath}" type="video/mp4">Your browser does not support video playback.</video>`;
+        } else if (type === "youtube") {
+            try {
+                // For YouTube, mediaPath should be the full YouTube URL
+                const sanitizedUrlContent = mediaPath.replace(/[^\x20-\x7E]/g, '').trim(); // Sanitize the URL
+                const videoId = sanitizedUrlContent.split("v=")[1]?.split("&")[0]; // Extract the video ID
+        
+                if (videoId) {
+                    mediaContainer.innerHTML = `
+                        <iframe 
+                            src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1"
+                            height="
+                            frameborder="0"
+                            allow="autoplay"
+                            allowfullscreen
+                            style="width: 100%; height: 40vh; border: none;">
+                        </iframe>`;
+                } else {
+                    throw new Error("Invalid YouTube URL format.");
+                }
+            } catch (error) {
+                console.error("Failed to load YouTube video:", error.message);
+                mediaContainer.innerHTML = `<p>Error: Could not load video. Please check the configuration.</p>`;
+            }
         }
     }
 
     function setupInputField(type) {
-        if (["image", "audio", "video"].includes(type)) {
+        if (["image", "audio", "video", "youtube"].includes(type)) {
             inputContainer.innerHTML = `
                 <input type="text" id="user-response" placeholder="Enter your answer" class="form-control">
             `;
