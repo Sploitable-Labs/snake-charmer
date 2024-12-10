@@ -42,7 +42,7 @@
         "type": "image",
         "instructions": "Examine the image below and identify the object in the picture.",
         "media": "/static/images/object.jpg",
-        "answer": "Tree",
+        "answer": "Toaster",
         "hints": [
             {"text": "Focus on the shape and size of the object.", "penalty": 3},
             {"text": "It is commonly found in forests.", "penalty": 2}
@@ -57,7 +57,7 @@
         "type": "audio",
         "instructions": "Listen to the audio and guess the animal making the sound.",
         "media": "/static/sounds/ninja_unlock.mp3",
-        "answer": "Dog",
+        "answer": "Ninja",
         "hints": [
             {"text": "The animal is a common pet.", "penalty": 3},
             {"text": "It barks.", "penalty": 2}
@@ -72,7 +72,7 @@
         "type": "video",
         "instructions": "Watch the video and answer the question about the content.",
         "media": "/static/videos/example.mp4",
-        "answer": "Physics",
+        "answer": "Rick",
         "hints": [
             {"text": "The topic involves science.", "penalty": 5},
             {"text": "It's about motion and forces.", "penalty": 3}

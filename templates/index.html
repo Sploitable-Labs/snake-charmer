@@ -317,7 +317,7 @@ def show_modal(title, message, icon_class, on_close=None):
 def fetch_arguments(callback):
     console.log("Fetching arguments.")
 
-    if window.current_challenge.get("type", "code") != "code":
+    if window.current_challenge["type"] != "code":
         console.log("Non-code challenge, skipping fetch_arguments.")
         return
 
@@ -375,9 +375,14 @@ def run_code_challenge():
             exec(user_code, {}, local_scope)
             if 'foo' in local_scope:
                 foo = local_scope['foo']
+                console.log(f"foo: {foo}")
+
                 output_area.text = ""
-                for test_case in convert_test_cases(js_test_cases):       
+                test_cases = convert_test_cases(js_test_cases)
+                
+                for test_case in test_cases:       
                     result = foo(*test_case)
+                    console.log(f"Test case: {test_case}, Result: {result}")
                     output_area.text += str(result) + "\n"
                     results.append(result)
                 submit_results(results)
@@ -456,6 +461,28 @@ def update_ui_on_success(response_data):
     hint_buttons = document.select(".hint-btn")
     for button in hint_buttons:
         button.disabled = True
+
+def is_iterable(obj):
+    try:
+        iter(obj)  # Attempt to get an iterator from the object
+        return True
+    except TypeError:  # If it raises TypeError, it's not iterable
+        return False
+
+def convert_test_cases(js_test_cases):
+    num_test_cases = len(js_test_cases)
+    test_cases = []
+    for idx in range(num_test_cases):
+        js_test_case = js_test_cases[idx]
+        test_case = []
+        for js_arg in js_test_case:
+            if is_iterable(js_arg) and not isinstance(js_arg, str) and not isinstance(js_arg, list):
+                arg = dict(js_arg)
+            else:
+                arg = js_arg
+            test_case.append(arg)
+        test_cases.append(test_case)
+    return test_cases
 
 # Attach run_user_code to the submit button
 document["submit-btn"].bind("click", run_user_code)
