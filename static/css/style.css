@@ -616,3 +616,10 @@ ul, ol {padding: 0px; margin: 0;}
         transform: scale(1);
     }
 }
+
+#user-response {
+    width: calc(100% - 20px); /* Adjusts the width to be 20px shorter */
+    margin-right: 10px;       /* Adds extra space on the right side */
+    padding-right: 10px;      /* Optional: Adds padding inside the div on the right */
+    box-sizing: border-box;   /* Ensures padding is included in the width calculation */
+}
