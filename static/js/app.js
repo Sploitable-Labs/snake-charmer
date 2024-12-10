@@ -209,4 +209,38 @@ challengeButtons.forEach(button => {
     function updateAvailableScore() {
         availableScoreElement.textContent = availableScore;
     }
+
+    // Attach event listener to the Ninja placeholder button
+    const ninjaPlaceholder = document.getElementById("ninja-placeholder");
+    if (ninjaPlaceholder) {
+        ninjaPlaceholder.addEventListener('click', () => {
+            const unlockModal = new bootstrap.Modal(document.getElementById('unlock-popup'));
+            unlockModal.show();
+        });
+    } else {
+        console.error("Ninja placeholder not found.");
+    }
+
+    document.getElementById('close-unlock-modal').addEventListener('click', () => {
+        const unlockModal = bootstrap.Modal.getInstance(document.getElementById('unlock-popup'));
+        unlockModal.hide();
+    });
+
+    document.addEventListener('keydown', function(event) {
+        // Find the key on the screen using the key code class (e.g., "c13" for Enter)
+        const keyElement = document.querySelector(`.c${event.keyCode}`);
+    
+        if (keyElement) {
+            // Add the highlight class to the key
+            keyElement.classList.add('highlighted');
+        }
+    });
+    
+    document.addEventListener('keyup', function(event) {
+        // Remove the highlight when the key is released
+        const keyElement = document.querySelector(`.c${event.keyCode}`);
+        if (keyElement) {
+            keyElement.classList.remove('highlighted');
+        }
+    });
 });
