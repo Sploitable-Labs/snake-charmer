@@ -416,6 +416,7 @@ def submit_results(results=None, user_response=None):
         data["user_answer"] = user_response
 
     def on_success(req):
+        console.log("Results submitted successfully.")
         try:
             response_data = window.JSON.parse(req.responseText)
             if response_data["success"]:
@@ -439,6 +440,7 @@ def submit_results(results=None, user_response=None):
         error_sound.play()
 
     req = window.XMLHttpRequest.new()
+    req.bind("load", lambda e: on_success(req) if req.status == 200 else on_failure(req))
     req.open("POST", "/submit_results", True)
     req.setRequestHeader("Content-Type", "application/json")
     req.send(window.JSON.stringify(data))
