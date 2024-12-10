@@ -431,7 +431,31 @@ def submit_results(results=None, user_response=None):
                     "fas fa-trophy text-success"
                 )
                 success_sound.play()
-                update_ui_on_success(response_data)
+                
+                # Update client-side user_data with latest score and completed challenges
+                window.user_data["score"] = response_data["score"]
+                window.user_data["completed_challenges"] = response_data["completed_challenges"]
+
+                active_challenge = document.querySelector('.challenge-btn.active-challenge')
+                if active_challenge and not active_challenge.select_one('.tick-mark'):
+                    active_challenge.innerHTML += ' <i class="fas fa-check-circle tick-mark"></i>'
+                
+                document["score"].text = str(response_data["score"])
+
+                # Reset available score to zero in the DOM
+                document["available-score"].text = "0"
+
+                # Disable the submit button
+                document["submit-btn"].disabled = True
+
+                # Select all elements with the class "hint-btn"
+                hint_buttons = document.select(".hint-btn")
+
+                # Loop through each button and set disabled to True
+                for button in hint_buttons:
+                    button.disabled = True
+
+
             else:
                 show_modal("Try Again!", "Incorrect response. Please try again.", "fas fa-times-circle text-danger")
                 fail_sound.play()
@@ -461,6 +485,8 @@ def update_ui_on_success(response_data):
     hint_buttons = document.select(".hint-btn")
     for button in hint_buttons:
         button.disabled = True
+
+    
 
 def is_iterable(obj):
     try:
