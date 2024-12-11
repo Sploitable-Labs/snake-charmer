@@ -56,7 +56,7 @@
                 {% endfor %}
 
                 <!-- Ninja Placeholder (Grayed Out and Clickable for Popup) -->
-                {% if not session.get('ninja_unlocked', False) %}
+                {% if not session.get('user_data', {}).get('ninja_unlocked', False) %}
                 <div class="category grayed-out" id="ninja-placeholder">
                     <button class="category-title">
                         Ninja <i class="fas fa-lock float-end"></i>
@@ -427,24 +427,23 @@ def submit_results(results=None, user_response=None):
             if response_data["success"]:  # Access properties directly
                 
                 # Check if Ninja category is unlocked
-                if response_data["ninja_unlocked"]:
+                if response_data["ninja_unlocked"] and not response_data["ninja_modal_shown"]:
+                    # Update client-side user data with the unlocked state
+                    window.user_data["ninja_unlocked"] = True
+                    window.user_data["ninja_modal_shown"] = True
+                    console.log("Ninja challenge unlocked!")
+                    console.log(window.user_data)
 
-                    # Check if the ninja challenge is already unlocked
-                    if "ninja_challenege" not in window.user_data:
+                    # Show modal with a callback to reload the page after dismissal
+                    show_modal(
+                        "おめでとう!",
+                        f"You have unlocked the ninja challenge!",
+                        "fas fa-user-ninja text-success",
+                        on_close=lambda: window.location.reload()  # Callback to reload the page
+                    )
 
-                        # Set flag to indicate the ninja challenge is now unlocked
-                        window.user_data["ninja_challenge"] = True
-
-                        # Show modal with a callback to reload the page after dismissal
-                        show_modal(
-                            "おめでとう!",
-                            f"You have unlocked the ninja challenge!",
-                            "fas fa-user-ninja text-success",
-                            on_close=lambda: window.location.reload()  # Callback to reload the page
-                        )
-
-                        # Play ninja sound
-                        ninja_unlock_sound.play()
+                    # Play ninja sound
+                    ninja_unlock_sound.play()
                 else:
                     # Show modal without a reload callback
                     show_modal(

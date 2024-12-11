@@ -59,10 +59,16 @@ def index():
             'score': 0,
             'completed_challenges': [],
             'used_hints': {},  # Track used hints per challenge
+            'ninja_unlocked': False,
+            'ninja_modal_shown': False,
         }
 
     ninja_unlocked = session['user_data']['score'] >= ninja_unlock_threshold
-    session['ninja_unlocked'] = ninja_unlocked
+    session['user_data']['ninja_unlocked'] = ninja_unlocked
+
+    if ninja_unlocked:
+        # If the modal has already been shown, don't show it again
+        session['user_data']['ninja_modal_shown'] = True
 
     challenges_to_send = challenges + (ninja_challenges if ninja_unlocked else [])
 
@@ -133,7 +139,10 @@ def submit_results():
 
     # Check for Ninja unlock
     ninja_unlocked = session['user_data']['score'] >= ninja_unlock_threshold
-    session['ninja_unlocked'] = ninja_unlocked
+    session['user_data']['ninja_unlocked'] = ninja_unlocked
+
+    ninja_modal_shown = session['user_data']['ninja_modal_shown']
+    session['user_data']['ninja_modal_shown'] = ninja_modal_shown
 
     # Response
     response = {
@@ -143,6 +152,7 @@ def submit_results():
         "completed_challenges": user_data['completed_challenges'],
         "challenge_score": final_score,
         "ninja_unlocked": ninja_unlocked,
+        'ninja_modal_shown': ninja_modal_shown,
     }
 
     if challenge["type"] == "code":
