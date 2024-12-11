@@ -424,13 +424,37 @@ def submit_results(results=None, user_response=None):
         console.log("Results submitted successfully.")
         try:
             response_data = window.JSON.parse(req.responseText)
-            if response_data["success"]:
-                show_modal(
-                    "Congratulations!",
-                    f"You earned {response_data['challenge_score']} points.",
-                    "fas fa-trophy text-success"
-                )
-                success_sound.play()
+            if response_data["success"]:  # Access properties directly
+                
+                # Check if Ninja category is unlocked
+                if response_data["ninja_unlocked"]:
+
+                    # Check if the ninja challenge is already unlocked
+                    if "ninja_challenege" not in window.user_data:
+
+                        # Set flag to indicate the ninja challenge is now unlocked
+                        window.user_data["ninja_challenge"] = True
+
+                        # Show modal with a callback to reload the page after dismissal
+                        show_modal(
+                            "おめでとう!",
+                            f"You have unlocked the ninja challenge!",
+                            "fas fa-user-ninja text-success",
+                            on_close=lambda: window.location.reload()  # Callback to reload the page
+                        )
+
+                        # Play ninja sound
+                        ninja_unlock_sound.play()
+                else:
+                    # Show modal without a reload callback
+                    show_modal(
+                        "Congratulations!",
+                        f"Challenge completed! You earned {response_data['challenge_score']} points.",
+                        "fas fa-trophy text-success"
+                    )
+
+                    # Play success sound
+                    success_sound.play()
                 
                 # Update client-side user_data with latest score and completed challenges
                 window.user_data["score"] = response_data["score"]

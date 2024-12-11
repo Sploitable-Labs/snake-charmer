@@ -19,7 +19,7 @@ app.config.update(
 challenges = []
 ninja_challenges = []
 
-ninja_unlock_threshold = 500
+ninja_unlock_threshold = 42
 
 def load_all_challenges():
     global challenges, ninja_challenges
