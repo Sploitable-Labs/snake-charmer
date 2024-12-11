@@ -57,32 +57,35 @@ def index():
     if 'user_data' not in session:
         session['user_data'] = {
             'score': 0,
-            'completed_challenges': []
+            'completed_challenges': [],
+            'used_hints': {},  # Track used hints per challenge
         }
 
     ninja_unlocked = session['user_data']['score'] >= ninja_unlock_threshold
     session['ninja_unlocked'] = ninja_unlocked
 
-    # Only send Ninja challenges if they are unlocked
     challenges_to_send = challenges + (ninja_challenges if ninja_unlocked else [])
 
     # Sanitize challenges data
     sanitized_challenges = [
         {
-            "id": challenge["id"],
+            "id": challenge["id"],  # Ensure IDs are strings
             "name": challenge["name"],
             "category": challenge["category"],
             "difficulty": challenge["difficulty"],
             "score": challenge["score"],
             "instructions": challenge["instructions"],
             "hint_count": challenge["hint_count"],
-            "type": challenge.get("type", "code"),  # Ensure the 'type' is included
-            "media": challenge.get("media", None)   # Include 'media' for non-code challenges
+            "type": challenge.get("type", "code"),
+            "media": challenge.get("media", None),
+            "completed": str(challenge["id"]) in session['user_data']['completed_challenges'],
+            "used_hints": session['user_data']['used_hints'].get(str(challenge["id"]), []),
         }
         for challenge in challenges_to_send
     ]
 
     return render_template('index.html', challenges=sanitized_challenges, user_data=session['user_data'])
+
 
 
 @app.route('/submit_results', methods=['POST'])

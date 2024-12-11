@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function isChallengeCompleted(challengeId) {
         // Check if user_data.completed_challenges contains the challenge ID
-        return window.user_data.completed_challenges.includes(String(challengeId));
+        return window.user_data.completed_challenges.includes(challengeId);
     }
 
     // Initialize settings modal
@@ -97,15 +97,15 @@ challengeButtons.forEach(button => {
                     hintButton.textContent = `Reveal Hint ${i + 1}`;
                     hintButton.dataset.hintIndex = i;
 
-                    console.log(selectedChallenge.id);
-                    console.log(isChallengeCompleted(selectedChallenge.id));
                     if(isChallengeCompleted(selectedChallenge.id)){
+                        console.log("Challenge is completed");
                         hintButton.disabled = true;
                         submitButton.disabled = true;
                         availableScore = 0;
                         updateAvailableScore()
+                    } else {
+                        submitButton.removeAttribute('disabled'); // Enable otherwise
                     }
-                    console.log(hintButton);
 
                     // Attach click event to request the hint from the server
                     hintButton.addEventListener('click', () => {
@@ -136,9 +136,6 @@ challengeButtons.forEach(button => {
                 loadChallengeMedia(type, selectedChallenge.media);
                 setupInputField(type);
             }
-
-            // Enable the submit button for all challenge types
-            submitButton.removeAttribute('disabled');
 
             // Update the available score
             availableScore = selectedChallenge.score;
