@@ -12,6 +12,11 @@ document.addEventListener('DOMContentLoaded', function () {
     editor.renderer.setPadding(10);
     editor.setReadOnly(true);
 
+    function isChallengeCompleted(challengeId) {
+        // Check if user_data.completed_challenges contains the challenge ID
+        return window.user_data.completed_challenges.includes(String(challengeId));
+    }
+
     // Initialize settings modal
     document.getElementById('settings-icon').addEventListener('click', () => {
         const settingsModal = new bootstrap.Modal(document.getElementById('settings-modal'));
@@ -77,7 +82,46 @@ challengeButtons.forEach(button => {
             document.getElementById('instructions-text').innerHTML = `<p>${selectedChallenge.instructions}</p>`;
 
             resetHints();
-            setupHints(selectedChallenge);
+
+            // Clear previous hint buttons
+            hintButtonsContainer.innerHTML = "";
+
+            // Display hints if available
+            if (selectedChallenge.hint_count > 0) {
+                hintsHeader.style.display = 'block';
+                
+                // Create hint buttons based on `hint_count`
+                for (let i = 0; i < selectedChallenge.hint_count; i++) {
+                    const hintButton = document.createElement('button');
+                    hintButton.classList.add('btn', 'btn-outline-secondary', 'hint-btn');
+                    hintButton.textContent = `Reveal Hint ${i + 1}`;
+                    hintButton.dataset.hintIndex = i;
+
+                    console.log(selectedChallenge.id);
+                    console.log(isChallengeCompleted(selectedChallenge.id));
+                    if(isChallengeCompleted(selectedChallenge.id)){
+                        hintButton.disabled = true;
+                        submitButton.disabled = true;
+                        availableScore = 0;
+                        updateAvailableScore()
+                    }
+                    console.log(hintButton);
+
+                    // Attach click event to request the hint from the server
+                    hintButton.addEventListener('click', () => {
+                        // Play hint sound
+                        hint_sound.play();
+
+                        requestHint(challengeId, i);  // Fetch hint text from the server
+                        // Disable the button after it's clicked
+                        hintButton.disabled = true;
+                    });
+
+                    hintButtonsContainer.appendChild(hintButton);
+                }
+            } else {
+                hintsHeader.style.display = 'none';
+            }
 
             // Clear previous content
             mediaContainer.innerHTML = ""; // Clear previous media
@@ -163,28 +207,6 @@ challengeButtons.forEach(button => {
     function resetHints() {
         hintContent.innerHTML = "";
         hintButtonsContainer.innerHTML = "";
-    }
-
-    function setupHints(challenge) {
-        if (challenge.hint_count > 0) {
-            hintsHeader.style.display = "block";
-            for (let i = 0; i < challenge.hint_count; i++) {
-                const hintButton = document.createElement('button');
-                hintButton.classList.add('btn', 'btn-outline-secondary', 'hint-btn');
-                hintButton.textContent = `Reveal Hint ${i + 1}`;
-                hintButton.dataset.hintIndex = i;
-
-                hintButton.addEventListener('click', () => {
-                    hint_sound.play();
-                    requestHint(challenge.id, i);
-                    hintButton.disabled = true;
-                });
-
-                hintButtonsContainer.appendChild(hintButton);
-            }
-        } else {
-            hintsHeader.style.display = "none";
-        }
     }
 
     function requestHint(challengeId, hintIndex) {
