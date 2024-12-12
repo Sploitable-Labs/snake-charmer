@@ -191,10 +191,13 @@ challengeButtons.forEach(button => {
                 mediaContainer.innerHTML = `<p>Error: Could not load video. Please check the configuration.</p>`;
             }
         }
+        else if (type === "file") {
+            mediaContainer.innerHTML = `<a href="${mediaPath}" download>Download File</a>`;
+        }
     }
 
     function setupInputField(type) {
-        if (["image", "audio", "video", "youtube"].includes(type)) {
+        if (["image", "audio", "video", "youtube", "file"].includes(type)) {
             inputContainer.innerHTML = `
                 <input type="text" id="user-response" placeholder="Enter your answer" class="form-control">
             `;

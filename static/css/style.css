@@ -628,6 +628,7 @@ ul, ol {padding: 0px; margin: 0;}
 /* Style for images or other media inside the computer */
 .computer img,
 .computer video,
+.computer a,
 .computer audio {
     height: 40vh;
     object-fit: contain; /* Preserve aspect ratio */

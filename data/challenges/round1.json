@@ -77,5 +77,20 @@
             {"text": "The topic involves science.", "penalty": 5},
             {"text": "It's about motion and forces.", "penalty": 3}
         ]
+    },
+    {
+        "id": 30,
+        "name": "File Example",
+        "category": "General",
+        "difficulty": "Easy",
+        "score": 30,
+        "type": "file",
+        "instructions": "Watch the video and answer the question about the content.",
+        "media": "/static/files/test.txt",
+        "answer": "test",
+        "hints": [
+            {"text": "The topic involves science.", "penalty": 5},
+            {"text": "It's about motion and forces.", "penalty": 3}
+        ]
     }
 ]

@@ -124,7 +124,7 @@ def submit_results():
         base_score = challenge['score']
         final_score = max(base_score - total_penalty, 0) if success else 0
 
-    elif challenge["type"] in ["image", "audio", "video", "youtube"]:
+    elif challenge["type"] in ["image", "audio", "video", "youtube", "file"]:
         # Validate non-coding challenges
         expected_answer = challenge["answer"].strip().lower()
         success = expected_answer == user_answer
